@@ -1,16 +1,20 @@
 {
-  "name": "playwright-clean",
+  "name": "playwright-tests",
   "version": "1.0.0",
+  "description": "Stajyer projesi - Frontend ve Backend testleri",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:frontend": "playwright test frontend-tests/",
+    "test:backend": "playwright test backend-tests/",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["playwright", "testing", "frontend", "backend"],
+  "author": "Stajyer",
+  "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.54.1",
-    "playwright": "^1.54.1"
+    "@playwright/test": "^1.40.0"
   }
 }
