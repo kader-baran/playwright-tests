@@ -41,3 +41,11 @@ test.describe("Sayfa Testleri", () => {
   });
 });
 ```
+
+
+________________________________________________________________________
+-- branch oluşturacaksın o branch'te çalışacaksın.
+1. FE POM Structure kurulacak.
+2. Elementler için kontroller sağlanacak. clickMethodu olacak. sendKeys methodu gibigi
+3. baseUrl: https://demoqa.com/
+4. Chrome brpwser + headlessfalse
