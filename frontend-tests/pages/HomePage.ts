@@ -1,18 +1,17 @@
 import { Page } from '@playwright/test';
 
 export class HomePage {
-    readonly page: Page;
+  readonly page: Page;
 
-    constructor(page: Page) {
-        this.page = page;
-        console.log("Pull request test"); // PR farkı için eklendi
-    }
+  constructor(page: Page) {
+    this.page = page;
+  }
 
-    async clickElementsCard() {
-        await this.page.getByText('Elements').click();
-    }
+  async goto() {
+    await this.page.goto('https://demoqa.com/');
+  }
 
-    async fillFullName(name: string) {
-        await this.page.getByPlaceholder('Full Name').fill(name);
-    }
+  async getTitle() {
+    return this.page.title();
+  }
 }
