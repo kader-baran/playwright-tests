@@ -23,4 +23,23 @@ test('Siteye gidip currentUrl kontrolü ve Elements kartına tıklama', async ({
   logStep('Text Box sayfası URL kontrol ediliyor');
   await expect(page).toHaveURL('https://demoqa.com/text-box');
   
+  logStep('Text Box başlığı görünüyor mu kontrol ediliyor');
+  await expect(page.getByRole('heading', { name: 'Text Box' })).toBeVisible();
+
+  logStep('Full Name alanına "kader" giriliyor ve kontrol ediliyor');
+  await page.fill('#userName', 'kader');
+  await expect(page.locator('#userName')).toHaveValue('kader');
+
+  logStep('Email alanına "kader@getmobil.com" giriliyor ve kontrol ediliyor');
+  await page.fill('#userEmail', 'kader@getmobil.com');
+  await expect(page.locator('#userEmail')).toHaveValue('kader@getmobil.com');
+
+  logStep('Permanent Address alanına "permanent address" giriliyor ve kontrol ediliyor');
+  await page.fill('#permanentAddress', 'permanent address');
+  await expect(page.locator('#permanentAddress')).toHaveValue('permanent address');
 }); 
+
+//Text Box'a tıklandıktan sonra ekranda Text Box yazısı görünüyor mu kontrol edeceğim.
+//fullname kader olarak girilmeli. bunu kontrol edeceğim.
+//email kader@getmobil.com olarak girilmeli. bunu kontrol edeceğim.
+//Permanent Address, permanent address olarak girilmeli. bunu kontrol edeceğim.
