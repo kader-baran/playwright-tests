@@ -37,9 +37,31 @@ test('Siteye gidip currentUrl kontrolü ve Elements kartına tıklama', async ({
   logStep('Permanent Address alanına "permanent address" giriliyor ve kontrol ediliyor');
   await page.fill('#permanentAddress', 'permanent address');
   await expect(page.locator('#permanentAddress')).toHaveValue('permanent address');
+
+  logStep('Check Box elementine tıklanıyor ve başlık kontrol ediliyor');
+  await page.click('li#item-1');
+  await expect(page.getByRole('heading', { name: 'Check Box' })).toBeVisible();
+
+  logStep('Home kartına tıklanıyor ve "You have selected :" ifadesi kontrol ediliyor');
+  await page.locator('span.rct-title', { hasText: 'Home' }).click();
+  await expect(page.locator('.text-success')).toContainText('You have selected');
+
+  logStep('+ butonuna tıklanıyor ve yeni kartlar ekleniyor mu kontrol ediliyor');
+  await page.click('button[title="Expand all"]');
+  await expect(page.locator('span.rct-title', { hasText: 'Desktop' })).toBeVisible();
+  await expect(page.locator('span.rct-title', { hasText: 'Documents' })).toBeVisible();
+  await expect(page.locator('span.rct-title', { hasText: 'Downloads' })).toBeVisible();
+
+  logStep('- butonuna tıklanıyor ve alt kartlar siliniyor mu kontrol ediliyor');
+  await page.click('button[title="Collapse all"]');
+  await expect(page.locator('span.rct-title', { hasText: 'Desktop' })).not.toBeVisible();
+  await expect(page.locator('span.rct-title', { hasText: 'Documents' })).not.toBeVisible();
+  await expect(page.locator('span.rct-title', { hasText: 'Downloads' })).not.toBeVisible();
 }); 
 
-//Text Box'a tıklandıktan sonra ekranda Text Box yazısı görünüyor mu kontrol edeceğim.
-//fullname kader olarak girilmeli. bunu kontrol edeceğim.
-//email kader@getmobil.com olarak girilmeli. bunu kontrol edeceğim.
-//Permanent Address, permanent address olarak girilmeli. bunu kontrol edeceğim.
+// check box a tıklayınca check box yazısı ekranda görünüyor mu  kontrol edeceğim
+// home kartına tıklayınca You have selected : ... gibi bir ifade yazıyor mu kontrol edeceğğim.
+//+ butonuna tıklayınca home kartının altına yeni kartlar ekleniyor mu kontrol edeceğim.
+//- butonuna tıklayınca home kartının altındaki kartlar siliniyor mu kontrol edeceğim.
+
+
