@@ -1,12 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
+import { logStep } from '../utils/logger'; 
 
-test('Ana sayfa yuklenmeli ve title kontrol edilmeli', async ({ page }) => {
+test('Siteye gidip currentUrl kontrolü ve Elements kartına tıklama', async ({ page }) => {
   const homePage = new HomePage(page);
-  await homePage.goto();
-  const title = await homePage.getTitle();
-  expect(title).toContain('DEMOQA');
 
-  // Elements kartına tıkla
+  logStep('Ana sayfaya gidiliyor');
+  await homePage.goto();
+
+  logStep('Current URL kontrol ediliyor');
+  await homePage.expectOnHomePage();
+
+  logStep('Elements kartına tıklanıyor');
   await homePage.clickElementsCard();
 }); 

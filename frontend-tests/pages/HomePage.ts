@@ -16,9 +16,14 @@ export class HomePage {
     return this.page.title();
   }
 
-  // Ana sayfadaki 'Elements' kartına tıkla
+  // Ana sayfada olduğundan emin ol (currentUrl kontrolü)
+  async expectOnHomePage() {
+    await this.page.waitForURL('https://demoqa.com/');
+  }
+
+  // 'Elements' kartına tıkla (en doğru locator ile)
   async clickElementsCard() {
-    await this.page.locator('div.card-body:has-text("Elements")').click();
+    await this.page.locator('.category-cards .card:has-text("Elements")').first().click();
   }
 
   // Buraya sayfa ile ilgili başka metotlar eklenebilir
