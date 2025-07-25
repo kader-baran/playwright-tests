@@ -11,10 +11,18 @@
     "test:ui": "playwright test --ui",
     "report": "playwright show-report"
   },
-  "keywords": ["playwright", "testing", "frontend", "backend"],
+  "keywords": [
+    "playwright",
+    "testing",
+    "frontend",
+    "backend"
+  ],
   "author": "Stajyer",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.54.1",
+    "dotenv": "^17.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }

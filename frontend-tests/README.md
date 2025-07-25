@@ -42,6 +42,16 @@ test.describe("Sayfa Testleri", () => {
 });
 ```
 
+## Proje Yapısı ve POM (Page Object Model)
+
+- `pages/` : Her bir sayfa için ayrı bir sınıf (ör: HomePage)
+- `components/` : Tekrar kullanılabilir küçük parça objeler (ör: Header)
+- `utils/` : Yardımcı fonksiyonlar
+- `tests/` : Test dosyaları (ör: homePage.spec.ts)
+- `fixtures/` : Test verileri (ör: users.json)
+
+Her sayfa ve component, kendi dosyasında, testler ise ayrı bir klasörde tutulur. Böylece kodun bakımı ve genişletilmesi kolaylaşır.
+
 
 ________________________________________________________________________
 -- branch oluşturacaksın o branch'te çalışacaksın.
