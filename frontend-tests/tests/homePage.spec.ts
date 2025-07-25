@@ -57,11 +57,30 @@ test('Siteye gidip currentUrl kontrolü ve Elements kartına tıklama', async ({
   await expect(page.locator('span.rct-title', { hasText: 'Desktop' })).not.toBeVisible();
   await expect(page.locator('span.rct-title', { hasText: 'Documents' })).not.toBeVisible();
   await expect(page.locator('span.rct-title', { hasText: 'Downloads' })).not.toBeVisible();
+
+  logStep('Radio Button elementine tıklanıyor ve URL kontrol ediliyor');
+  await page.click('li#item-2');
+  await expect(page).toHaveURL('https://demoqa.com/radio-button');
+
+  logStep('Radio Button başlığı görünüyor mu kontrol ediliyor');
+  await expect(page.getByRole('heading', { name: 'Radio Button' })).toBeVisible();
+
+  logStep('Yes radio buttona tıklanıyor ve sonuç kontrol ediliyor');
+  await page.click('label[for="yesRadio"]');
+  await expect(page.locator('.text-success')).toHaveText('Yes');
+
+  logStep('Impressive radio buttona tıklanıyor ve sonuç kontrol ediliyor');
+  await page.click('label[for="impressiveRadio"]');
+  await expect(page.locator('.text-success')).toHaveText('Impressive');
+
+  logStep('No radio buttonunun pasif olduğu kontrol ediliyor');
+  await expect(page.locator('#noRadio')).toBeDisabled();
 }); 
 
-// check box a tıklayınca check box yazısı ekranda görünüyor mu  kontrol edeceğim
-// home kartına tıklayınca You have selected : ... gibi bir ifade yazıyor mu kontrol edeceğğim.
-//+ butonuna tıklayınca home kartının altına yeni kartlar ekleniyor mu kontrol edeceğim.
-//- butonuna tıklayınca home kartının altındaki kartlar siliniyor mu kontrol edeceğim.
+// radio buttona tıklanınca https://demoqa.com/radio-button bu adrese gidiyor mu kontrol edeceğim
+//ekranda radio button yazısı görünüyor mu kontrol edeceğim 
+//yes radio buttona tıklanınca ekranda "You have selected Yes" yazısı görünüyor mu kontrol edeceğim
+//impressive radio buttona tıklanınca ekranda "You have selected Impressive" yazısı görünüyor mu kontrol edeceğim
+//no radio buttonu pasif olmalı. bunu kontrol edeceğim
 
 
