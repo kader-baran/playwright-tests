@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
+  test.setTimeout(60000); // 60 saniye
+
   // Ana sayfaya git
   await page.goto('https://demoqa.com/');
   
@@ -67,6 +69,11 @@ test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
   await homeCheckbox.click();
   const homeCheckboxInput = page.locator('input#tree-node-home');
   await expect(homeCheckboxInput).toBeChecked();
+
+  //home kutusunu seçince You have selected :... yazısının görünüp görünmediğini kontrol edeceğim.
+  await expect(page.locator('#result')).toContainText('You have selected :');
+  await expect(page.locator('#result')).toContainText('home');
+
   
   // + butonuna tıklandığında alt seçenekler görünür olmalı. kontrol deceğim.
   const expandButton = page.locator('button[title="Expand all"]');
@@ -94,6 +101,12 @@ test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
   const desktopCheckbox = page.locator('label[for="tree-node-desktop"] span.rct-checkbox');
   await desktopCheckbox.click();
   await expect(desktopCheckboxInput).toBeChecked();
+
+  //desktop kutusunu seçince You have selected :You have selected : desktop notes commands yazısının görünüp görünmediğini kontrol edeceğim.
+  await expect(page.locator('#result')).toContainText('You have selected :');
+  await expect(page.locator('#result')).toContainText('desktop');
+  await expect(page.locator('#result')).toContainText('notes');
+  await expect(page.locator('#result')).toContainText('commands');
 
   //desktop kutusunun altındaki kutucukların seçilip seçilmediğini kontrol edeceğim.
   const notesCheckboxInput = page.locator('input#tree-node-notes');
@@ -123,7 +136,6 @@ test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
   await expect(workspaceCheckboxInput).not.toBeChecked();
   await expect(officeCheckboxInput).not.toBeChecked();
 
-  // downloads
   const downloadsCheckbox = page.locator('label[for="tree-node-downloads"] span.rct-checkbox');
   await downloadsCheckbox.click();
   await expect(downloadsCheckboxInput).toBeChecked();
@@ -172,6 +184,11 @@ test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
   await webTablesMenu.click();
   await expect(page).toHaveURL(/\/webtables$/);
 
+  //bu ekranda kayıtlı olan kişilerin bilgilerinin görünüp görünmediğini kontrol edeceğim.
+  await expect(page.locator('.rt-tbody')).toContainText('Cierra');
+  await expect(page.locator('.rt-tbody')).toContainText('Alden');
+  await expect(page.locator('.rt-tbody')).toContainText('Kierra');
+
   // Web Tables ekranında 'Add' butonuna tıklayınca kişi bilgileri giriş ekranı (modal form) geliyor mu kontrol edelim
   const addButton = page.getByRole('button', { name: 'Add' });
   await expect(addButton).toBeVisible();
@@ -215,5 +232,99 @@ test('DemoQA Ana Sayfa ve Text Box Form Testi', async ({ page }) => {
   // type kısmında "kader" yazıp arama yapınca kader kişisi görünüyor mu kontrol edeceğim.
   await page.locator('#searchBox').fill('kader');
   await expect(page.locator('.rt-tbody')).toContainText('kader');
+
+ 
+//elements alt başlıklarından buttons kısmına tıklayınca button kısmına yönlendirildiğini kontrol edeceğim.
+const buttonsMenu = page.getByRole('listitem').filter({ hasText: 'Buttons' });
+await expect(buttonsMenu).toBeVisible();
+await buttonsMenu.click();
+await expect(page).toHaveURL(/\/buttons$/);
+
+//double click me butonuna bir kere tıklayınca bir şey yazmayacak. bunu kontrol edeceğim.
+const doubleClickBtn = page.getByRole('button', { name: 'Double Click Me' });
+await doubleClickBtn.click();
+await expect(page.locator('#doubleClickMessage')).not.toBeVisible();
+
+//double click me butonuna iki kere tıklayınca You have done a double click yazısı görünecek. bunu kontrol edeceğim.
+await doubleClickBtn.dblclick();
+await expect(page.locator('#doubleClickMessage')).toBeVisible();
+await expect(page.locator('#doubleClickMessage')).toHaveText('You have done a double click');
+
+//right click me butonuna sol tıklayınca bir şey görünmeyecek. bunu kontrol edeceğim.
+const rightClickBtn = page.getByRole('button', { name: 'Right Click Me' });
+await rightClickBtn.click();
+await expect(page.locator('#rightClickMessage')).not.toBeVisible();
+
+//right click me butonuna sağ tıklayınca You have done a right click yazısı görünecek. bunu kontrol edeceğim.
+await rightClickBtn.click({ button: 'right' });
+await expect(page.locator('#rightClickMessage')).toBeVisible();
+await expect(page.locator('#rightClickMessage')).toHaveText('You have done a right click');
+
+//click me butonuna bir kere tıklayınca ekranda yazı çıkacak. bunu kontrol edeceğim.
+await page.goto('https://demoqa.com/buttons');
+const clickMeBtn = page.getByRole('button', { name: 'Click Me', exact: true });
+await expect(clickMeBtn).toBeVisible();
+await clickMeBtn.click();
+await expect(page.locator('p:has-text("You have done a dynamic click")')).toBeVisible();
+await expect(page.locator('p:has-text("You have done a dynamic click")')).toHaveText('You have done a dynamic click');
+
+
+//elements alt başlıklarından links kısmına tıklayınca links kısmına yönlendirildiğini kontrol edeceğim.
+await page.goto('https://demoqa.com/');
+const elementsCardLinks = page.locator('.card-body:has-text("Elements")');
+await expect(elementsCardLinks).toBeVisible();
+await elementsCardLinks.click();
+await expect(page).toHaveURL('https://demoqa.com/elements');
+
+const linksMenu = page.locator('li#item-5').filter({ hasText: /^Links$/ });
+await expect(linksMenu).toBeVisible();
+await linksMenu.click();
+await expect(page).toHaveURL(/\/links$/);
+
+//links kısmında home linkine tıklayınca yeni bir sayfaya yönlendirildiğini kontrol edeceğim.
+const [newPage] = await Promise.all([
+  page.context().waitForEvent('page'),
+  page.locator('#simpleLink').click()
+]);
+await newPage.waitForLoadState();
+await expect(newPage).toHaveURL('https://demoqa.com/');
+
+//links kısmında HomeYNWCv linkine tıklayınca yeni bir sayfaya yönlendirildiğini kontrol edeceğim.
+const [newPage2] = await Promise.all([
+  page.context().waitForEvent('page'),
+  page.locator('#dynamicLink').click()
+]);
+await newPage2.waitForLoadState();
+await expect(newPage2).toHaveURL('https://demoqa.com/');
+
+//links kısmında Created linkine tıklayınca alt kısımda "Link has responded with staus 201 and status text Created" yazısı görünecek. kontrol edeceğim.
+await page.locator('#created').click();
+await expect(page.locator('#linkResponse')).toBeVisible();
+await expect(page.locator('#linkResponse')).toContainText('Link has responded with staus 201 and status text Created');
+
+//links kısmında No Content linkine tıklayınca alt kısımda "Link has responded with staus 204 and status text No Content" yazısı görünecek. kontrol edeceğim.
+await page.locator('#no-content').click();
+await expect(page.locator('#linkResponse')).toBeVisible();
+await expect(page.locator('#linkResponse')).toContainText('Link has responded with staus 204 and status text No Content');
+
+//links kısmında Moved linkine tıklayınca alt kısımda "Link has responded with staus 301 and status text Moved Permanently" yazısı görünecek. kontrol edeceğim.
+await page.locator('#moved').click();
+await expect(page.locator('#linkResponse')).toBeVisible();
+await expect(page.locator('#linkResponse')).toContainText('Link has responded with staus 301 and status text Moved Permanently');
+
+//forms alt başlıklarından practice form kısmına tıklayınca practice form kısmına yönlendirildiğini kontrol edeceğim.
+await page.goto('https://demoqa.com/');
+const formsCard = page.locator('.card-body:has-text("Forms")');
+await expect(formsCard).toBeVisible();
+await formsCard.click();
+await expect(page).toHaveURL('https://demoqa.com/forms');
+
+const practiceFormMenu = page.locator('li#item-0').filter({ hasText: /^Practice Form$/ });
+await expect(practiceFormMenu).toBeVisible();
+await practiceFormMenu.click();
+await expect(page).toHaveURL(/\/automation-practice-form$/);
+
+
+
 });
 
