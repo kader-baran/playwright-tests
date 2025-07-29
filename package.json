@@ -9,6 +9,8 @@
     "test:backend": "playwright test backend-tests/",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --headed --debug",
+    "test:debug-frontend": "playwright test frontend-tests/ --headed --debug",
     "report": "playwright show-report"
   },
   "keywords": ["playwright", "testing", "frontend", "backend"],
