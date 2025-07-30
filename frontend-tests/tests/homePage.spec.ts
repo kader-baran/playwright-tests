@@ -262,7 +262,7 @@ await expect(page.locator('#rightClickMessage')).toHaveText('You have done a rig
 
 //click me butonuna bir kere tıklayınca ekranda yazı çıkacak. bunu kontrol edeceğim.
 await page.goto('https://demoqa.com/buttons');
-const clickMeBtn = page.getByRole('button', { name: 'Click Me', exact: true });
+const clickMeBtn = page.locator('button.btn.btn-primary:has-text("Click Me"):not([id*="doubleClick"]):not([id*="rightClick"])');
 await expect(clickMeBtn).toBeVisible();
 await clickMeBtn.click();
 await expect(page.locator('p:has-text("You have done a dynamic click")')).toBeVisible();
@@ -270,6 +270,8 @@ await expect(page.locator('p:has-text("You have done a dynamic click")')).toHave
 
 
 //elements alt başlıklarından links kısmına tıklayınca links kısmına yönlendirildiğini kontrol edeceğim.
+// yeni sekmede açılıp testi tamamladıktan sonra sekmeyi kapatacağım.
+
 await page.goto('https://demoqa.com/');
 const elementsCardLinks = page.locator('.card-body:has-text("Elements")');
 await expect(elementsCardLinks).toBeVisible();
@@ -312,9 +314,46 @@ await page.locator('#moved').click();
 await expect(page.locator('#linkResponse')).toBeVisible();
 await expect(page.locator('#linkResponse')).toContainText('Link has responded with staus 301 and status text Moved Permanently');
 
+//broken links - images alt başlıklarına tıklayınca broken links - images alt başlıklarına yönlendirildiğini kontrol edeceğim.
+const brokenLinksMenu = page.locator('li#item-6').filter({ hasText: /^Broken Links - Images$/ });
+await expect(brokenLinksMenu).toBeVisible();
+await brokenLinksMenu.click();
+await expect(page).toHaveURL(/\/broken$/);
+
+//valid image kısmında image görünüyor mu kontrol edeceğim.
+const validImage = page.locator('img[src*="Toolsqa_1.jpg"]');
+await expect(validImage).toBeVisible();
+await expect(validImage).toHaveAttribute('src', /Toolsqa_1\.jpg$/);
+
+//broken image kısmında image görünmemeli bunu kontrol edeceğim.
+// Önce sayfadaki tüm img elementlerini kontrol edelim
+const allImages = page.locator('img');
+const imageCount = await allImages.count();
+console.log(`Sayfada ${imageCount} adet image bulundu`);
+
+// Broken image için doğru selector'ı kullanalım
+const brokenImage = page.locator('img[src*="Toolsqa_1.jpg"]');
+await expect(brokenImage).toBeVisible(); // Element var ama image yüklenememiş
+await expect(brokenImage).toHaveAttribute('src', /Toolsqa_1\.jpg$/);
+// Broken image için naturalWidth ve naturalHeight 0 olmalı
+await expect(brokenImage).toHaveJSProperty('naturalWidth', 0);
+await expect(brokenImage).toHaveJSProperty('naturalHeight', 0);
+
+//valid link kısmına tıklayınca aynı sayfada linkin açıldığını kontrol edeceğim.
+const validLink = page.locator('a[href="http://demoqa.com"]');
+await expect(validLink).toBeVisible();
+await expect(validLink).toHaveText('Click Here for Valid Link');
+
+// Valid link'e tıklayınca aynı sayfada açıldığını kontrol edeceğim
+await validLink.click();
+await expect(page).toHaveURL('https://demoqa.com/');
+
+//    https://the-internet.herokuapp.com/status_codes/500 currentURL kontrolü
+// bir önceki sayfaya dön
+
 //forms alt başlıklarından practice form kısmına tıklayınca practice form kısmına yönlendirildiğini kontrol edeceğim.
 await page.goto('https://demoqa.com/');
-const formsCard = page.locator('.card-body:has-text("Forms")');
+const formsCard = page.locator('.card:has-text("Forms")');
 await expect(formsCard).toBeVisible();
 await formsCard.click();
 await expect(page).toHaveURL('https://demoqa.com/forms');
@@ -323,6 +362,69 @@ const practiceFormMenu = page.locator('li#item-0').filter({ hasText: /^Practice 
 await expect(practiceFormMenu).toBeVisible();
 await practiceFormMenu.click();
 await expect(page).toHaveURL(/\/automation-practice-form$/);
+
+//practice form kısmında name kısmına "kader" yazıp enter tuşuna basınca name kısmına "kader" yazılıyor mu kontrol edeceğim.
+const firstNameInput = page.locator('#firstName');
+await expect(firstNameInput).toBeVisible();
+await firstNameInput.fill('kader');
+await firstNameInput.press('Enter');
+await expect(firstNameInput).toHaveValue('kader');
+
+//last name kısmına "baran" yazıp enter tuşuna basınca last name kısmına "baran" yazılıyor mu kontrol edeceğim.
+const lastNameInput = page.locator('#lastName');
+await expect(lastNameInput).toBeVisible();
+await lastNameInput.fill('baran');
+await lastNameInput.press('Enter');
+await expect(lastNameInput).toHaveValue('baran');
+
+//email kısmına "kader@getmobil.com" yazıp enter tuşuna basınca email kısmına "kader@getmobil.com" yazılıyor mu kontrol edeceğim.
+const practiceEmailInput = page.locator('#userEmail');
+await expect(practiceEmailInput).toBeVisible();
+await practiceEmailInput.fill('kader@getmobil.com');
+await practiceEmailInput.press('Enter');
+await expect(practiceEmailInput).toHaveValue('kader@getmobil.com');
+
+//gender kısmında male seçeceğim seçiliyor mu kontrol edeceğim.
+const genderMaleLabel = page.locator('label[for="gender-radio-1"]');
+await expect(genderMaleLabel).toBeVisible();
+await genderMaleLabel.click();
+const genderMale = page.locator('#gender-radio-1');
+await expect(genderMale).toBeChecked();
+
+//mobile kısmına "1234567890" yazıp enter tuşuna basınca mobile kısmına "1234567890" yazılıyor mu kontrol edeceğim.
+const mobileInput = page.locator('#userNumber');
+await expect(mobileInput).toBeVisible();
+await mobileInput.fill('1234567890');
+await mobileInput.press('Enter');
+await expect(mobileInput).toHaveValue('1234567890');
+
+//subject kısmına "Maths" yazıp enter tuşuna basınca subject kısmına "Maths" yazılıyor mu kontrol edeceğim.
+const subjectInput = page.locator('#subjectsInput');
+await expect(subjectInput).toBeVisible();
+await subjectInput.fill('Maths');
+await subjectInput.press('Enter');
+
+// Modal'ı JavaScript ile kaldır
+await page.evaluate(() => {
+  const modal = document.querySelector('.modal.show');
+  if (modal) {
+    modal.remove();
+  }
+  // Modal backdrop'u da kaldır
+  const backdrop = document.querySelector('.modal-backdrop');
+  if (backdrop) {
+    backdrop.remove();
+  }
+});
+await page.waitForTimeout(1000);
+
+//hobbies kısmında reading ve sports ikisini de seçeceğim. seçiliyor mu kontrol edeceğim.
+const hobbiesReading = page.locator('#hobbies-checkbox-1');
+await expect(hobbiesReading).toBeVisible();
+await hobbiesReading.click();
+const hobbiesSports = page.locator('#hobbies-checkbox-2');
+await expect(hobbiesSports).toBeVisible();
+await hobbiesSports.click();
 
 
 
