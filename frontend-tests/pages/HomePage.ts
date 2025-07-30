@@ -1,47 +1,30 @@
-import test, { Page } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class HomePage {
-    readonly page: Page;
+  readonly page: Page;
+  readonly elementsCard: Locator;
+  readonly formsCard: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
-        console.log("Pull request test"); // PR farkı için eklendi
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.elementsCard = page.locator('.card-body').filter({ hasText: 'Elements' });
+    this.formsCard = page.locator('.card:has-text("Forms")');
+  }
 
-    async goto() {
-        await this.page.goto('https://demoqa.com/');
-    }
+  async goto() {
+    await this.page.goto('https://demoqa.com/');
+  }
 
-    async getTitle() {
-        return await this.page.title();
-    }
+  async clickElementsCard() {
+    await expect(this.elementsCard).toBeVisible();
+    await this.elementsCard.click();
+    await expect(this.page).toHaveURL('https://demoqa.com/elements');
+  }
 
-    async navigateToHomePage() {
-        await this.page.goto('/');
-    }
-
-    async clickElementsCard() {
-        await this.page.getByText('Elements').click();
-    }
-
-    async clickTextBoxCard() {
-        await this.page.getByText('Text Box').click();
-    }
-
-    async isPageLoaded() {
-        // Sayfanın yüklendiğini kontrol etmek için bir element bekleyelim
-        await this.page.waitForSelector('body', { timeout: 10000 });
-        return true;
-    }
-
-    async getCurrentUrl() {
-        return this.page.url();
-    }
-
-    async fillFullName(name: string) {
-        await this.page.getByPlaceholder('Full Name').fill(name);
-    }
-
-
+  async clickFormsCard() {
+    await expect(this.formsCard).toBeVisible();
+    await this.formsCard.click();
+    await expect(this.page).toHaveURL('https://demoqa.com/forms');
+  }
 }
 
