@@ -12,7 +12,7 @@ export class TextBoxPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.textBoxMenu = page.getByRole('listitem').filter({ hasText: 'Text Box' });
+    this.textBoxMenu = page.locator('li#item-0');
     this.fullNameInput = page.locator('#userName');
     this.emailInput = page.locator('#userEmail');
     this.currentAddressInput = page.locator('#currentAddress');

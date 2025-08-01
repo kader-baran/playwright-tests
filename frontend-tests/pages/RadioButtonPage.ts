@@ -11,7 +11,7 @@ export class RadioButtonPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.radioButtonMenu = page.getByRole('listitem').filter({ hasText: 'Radio Button' });
+    this.radioButtonMenu = page.locator('li#item-2');
     this.yesRadioLabel = page.locator('label[for="yesRadio"]');
     this.noRadioLabel = page.locator('label[for="noRadio"]');
     this.impressiveRadioLabel = page.locator('label[for="impressiveRadio"]');

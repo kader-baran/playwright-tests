@@ -10,7 +10,7 @@ export class BrokenLinksPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.brokenLinksMenu = page.locator('li#item-6').filter({ hasText: /^Broken Links - Images$/ });
+    this.brokenLinksMenu = page.locator('li#item-6');
     this.validImage = page.locator('img[src*="Toolsqa_1.jpg"]');
     this.allImages = page.locator('img');
     this.brokenImage = page.locator('img[src*="Toolsqa_1.jpg"]');

@@ -12,7 +12,7 @@ export class LinksPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.linksMenu = page.locator('li#item-5').filter({ hasText: /^Links$/ });
+    this.linksMenu = page.locator('li#item-5');
     this.simpleLink = page.locator('#simpleLink');
     this.dynamicLink = page.locator('#dynamicLink');
     this.createdLink = page.locator('#created');

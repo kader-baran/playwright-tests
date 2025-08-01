@@ -40,7 +40,7 @@ export class PracticeFormPage {
   }
 
   async goto() {
-    await this.page.goto('https://demoqa.com/automation-practice-form');
+    await this.page.goto('https://demoqa.com/automation-practice-form', { waitUntil: 'domcontentloaded' });
     await expect(this.page).toHaveURL(/\/automation-practice-form$/);
   }
 
@@ -64,6 +64,20 @@ export class PracticeFormPage {
 
   async selectMaleGender() {
     await expect(this.genderMaleLabel).toBeVisible();
+    
+    // Fixed banner ve footer'ı kaldır
+    await this.page.evaluate(() => {
+      const fixedBanner = document.getElementById('fixedban');
+      if (fixedBanner) {
+        fixedBanner.remove();
+      }
+      
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.remove();
+      }
+    });
+    
     await this.genderMaleLabel.click();
     await expect(this.genderMale).toBeChecked();
   }
@@ -101,6 +115,17 @@ export class PracticeFormPage {
   }
 
   async selectState(state: string) {
+    // Modal varsa kapat
+    try {
+      const modal = this.page.locator('.modal-content');
+      if (await modal.isVisible()) {
+        await this.page.locator('#closeLargeModal').click();
+        await this.page.waitForTimeout(500);
+      }
+    } catch (error) {
+      // Modal yoksa devam et
+    }
+    
     await expect(this.stateInput).toBeVisible();
     await this.stateInput.click();
     await this.page.waitForTimeout(1000); // Dropdown açılması için bekle
@@ -115,7 +140,7 @@ export class PracticeFormPage {
       } catch (error2) {
         // Son çare olarak JavaScript ile seç
         await this.page.evaluate(() => {
-          const options = document.querySelectorAll('div[class*="option"]');
+          const options = Array.from(document.querySelectorAll('div[class*="option"]'));
           for (const option of options) {
             if (option.textContent?.includes('NCR')) {
               (option as HTMLElement).click();
@@ -130,6 +155,17 @@ export class PracticeFormPage {
   }
 
   async selectCity(city: string) {
+    // Modal varsa kapat
+    try {
+      const modal = this.page.locator('.modal-content');
+      if (await modal.isVisible()) {
+        await this.page.locator('#closeLargeModal').click();
+        await this.page.waitForTimeout(500);
+      }
+    } catch (error) {
+      // Modal yoksa devam et
+    }
+    
     await expect(this.cityInput).toBeVisible();
     await this.cityInput.click();
     await this.page.waitForTimeout(1000); // Dropdown açılması için bekle
@@ -144,7 +180,7 @@ export class PracticeFormPage {
       } catch (error2) {
         // Son çare olarak JavaScript ile seç
         await this.page.evaluate(() => {
-          const options = document.querySelectorAll('div[class*="option"]');
+          const options = Array.from(document.querySelectorAll('div[class*="option"]'));
           for (const option of options) {
             if (option.textContent?.includes('Delhi')) {
               (option as HTMLElement).click();

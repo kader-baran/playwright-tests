@@ -17,7 +17,7 @@ export class WebTablesPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.webTablesMenu = page.getByRole('listitem').filter({ hasText: 'Web Tables' });
+    this.webTablesMenu = page.locator('li#item-3');
     this.addButton = page.getByRole('button', { name: 'Add' });
     this.modalContent = page.locator('.modal-content');
     this.firstNameInput = page.locator('#firstName');
@@ -62,7 +62,11 @@ export class WebTablesPage {
   }
 
   async submitPersonForm() {
+    await expect(this.submitButton).toBeVisible();
+    await expect(this.submitButton).toBeEnabled();
+    await this.page.waitForTimeout(500); // Butonun stabil olması için bekle
     await this.submitButton.click();
+    await this.page.waitForTimeout(1000); // Modal'ın kapanması için bekle
   }
 
   async verifyPersonInTable(firstName: string, lastName: string, email: string, age: string, salary: string, department: string) {

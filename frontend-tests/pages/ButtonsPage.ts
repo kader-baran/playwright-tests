@@ -12,7 +12,7 @@ export class ButtonsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.buttonsMenu = page.getByRole('listitem').filter({ hasText: 'Buttons' });
+    this.buttonsMenu = page.locator('li#item-4');
     this.doubleClickButton = page.getByRole('button', { name: 'Double Click Me' });
     this.rightClickButton = page.getByRole('button', { name: 'Right Click Me' });
     this.clickMeButton = page.locator('button.btn.btn-primary:has-text("Click Me"):not([id*="doubleClick"]):not([id*="rightClick"])');

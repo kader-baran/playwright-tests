@@ -23,7 +23,7 @@ export class CheckBoxPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.checkBoxMenu = page.getByRole('listitem').filter({ hasText: 'Check Box' });
+    this.checkBoxMenu = page.locator('li#item-1');
     this.homeCheckbox = page.locator('label[for="tree-node-home"] span.rct-checkbox');
     this.homeCheckboxInput = page.locator('input#tree-node-home');
     this.expandButton = page.locator('button[title="Expand all"]');
