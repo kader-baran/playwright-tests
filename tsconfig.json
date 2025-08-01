@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["ES2016", "DOM"],
+    "rootDir": "./frontend-tests",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": ["@playwright/test"],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": ["frontend-tests/**/*.ts"],
+  "exclude": ["playwright.config.ts"]
+}

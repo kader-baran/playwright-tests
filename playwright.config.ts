@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+
   testDir: './',
   fullyParallel: true, // Paralel çalışma için true
   forbidOnly: !!process.env.CI,
@@ -33,8 +34,21 @@ export default defineConfig({
     // Tarayıcının kapanmasını önlemek için
     actionTimeout: 10000,
     navigationTimeout: 30000,
+
+  testDir: './frontend-tests',
+  timeout: 30000,
+  expect: {
+    timeout: 5000
+  },
+  fullyParallel: true,
+  retries: 0,
+  reporter: 'html',
+  use: {
+    trace: 'on-first-retry',
+
   },
 
+  // 🔽 Sadece chromium ile test calistirmak icin:
   projects: [
     {
       name: 'chromium',
@@ -51,6 +65,7 @@ export default defineConfig({
         }
       },
     },
+
     {
       name: 'firefox',
       use: { 
@@ -64,5 +79,7 @@ export default defineConfig({
         }
       },
     },
+
+
   ],
 });
