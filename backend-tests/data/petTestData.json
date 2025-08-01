@@ -1,0 +1,73 @@
+{
+  "validPets": [
+    {
+      "name": "Buddy",
+      "photoUrls": ["https://example.com/buddy.jpg"],
+      "status": "available",
+      "category": {
+        "id": 1,
+        "name": "Dogs"
+      },
+      "tags": [
+        {
+          "id": 1,
+          "name": "friendly"
+        },
+        {
+          "id": 2,
+          "name": "playful"
+        }
+      ]
+    },
+    {
+      "name": "Whiskers",
+      "photoUrls": ["https://example.com/whiskers.jpg"],
+      "status": "pending",
+      "category": {
+        "id": 2,
+        "name": "Cats"
+      },
+      "tags": [
+        {
+          "id": 3,
+          "name": "independent"
+        }
+      ]
+    },
+    {
+      "name": "Goldie",
+      "photoUrls": ["https://example.com/goldie.jpg"],
+      "status": "sold",
+      "category": {
+        "id": 3,
+        "name": "Fish"
+      },
+      "tags": [
+        {
+          "id": 4,
+          "name": "calm"
+        }
+      ]
+    }
+  ],
+  "invalidPets": [
+    {
+      "name": "",
+      "photoUrls": [],
+      "status": "invalid_status"
+    },
+    {
+      "name": null,
+      "photoUrls": null,
+      "status": "available"
+    }
+  ],
+  "updateData": {
+    "name": "Updated Buddy",
+    "status": "sold"
+  },
+  "formUpdateData": {
+    "name": "Form Updated Pet",
+    "status": "pending"
+  }
+} 
