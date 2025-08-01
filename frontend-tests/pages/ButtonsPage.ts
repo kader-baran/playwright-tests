@@ -22,9 +22,27 @@ export class ButtonsPage {
   }
 
   async clickButtonsMenu() {
-    await expect(this.buttonsMenu).toBeVisible();
+    // Buttons menüsünün görünür olduğunu kontrol et
+    await expect(this.buttonsMenu).toBeVisible({ timeout: 10000 });
+    
+    // Buttons menüsüne tıkla
     await this.buttonsMenu.click();
+    
+    // URL'nin değiştiğini kontrol et
     await expect(this.page).toHaveURL(/\/buttons$/);
+    
+    // Sayfa tamamen yüklenmesini bekle
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    
+    // Buttons sayfasının yüklendiğini kontrol et
+    await expect(this.page.getByRole('heading', { name: 'Buttons' })).toBeVisible({ timeout: 10000 });
+    
+    // Buttons elementlerinin görünür olduğunu kontrol et
+    await expect(this.doubleClickButton).toBeVisible({ timeout: 10000 });
+    
+    // Ek güvenlik için kısa bir bekleme
+    await this.page.waitForTimeout(1000);
   }
 
   async performDoubleClick() {

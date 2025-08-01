@@ -13,7 +13,19 @@ export class HomePage {
   }
 
   async goto() {
+    // Base URL'ye git
     await this.page.goto('https://demoqa.com/');
+    
+    // Sayfanın tamamen yüklenmesini bekle
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    
+    
+    // Ana sayfa elementlerinin görünür olduğunu kontrol et
+    await expect(this.page.locator('.card').first()).toBeVisible({ timeout: 10000 });
+    
+    // Ek güvenlik için kısa bir bekleme
+    await this.page.waitForTimeout(1000);
   }
 
   async getTitle() {
@@ -26,7 +38,8 @@ export class HomePage {
   }
 
   async clickElementsCard() {
-    await expect(this.elementsCard).toBeVisible();
+    // Elements kartının görünür olduğunu kontrol et
+    await expect(this.elementsCard).toBeVisible({ timeout: 10000 });
     
     // Fixed banner ve footer'ı kaldır
     await this.page.evaluate(() => {
@@ -41,11 +54,18 @@ export class HomePage {
       }
     });
     
+    // Elements kartına tıkla
     await this.elementsCard.click();
+    
+    // URL'nin değiştiğini kontrol et
     await expect(this.page).toHaveURL('https://demoqa.com/elements');
     
     // Sayfa tamamen yüklenmesini bekle
-    await this.page.waitForLoadState('networkidle', { timeout: 20000 });
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('networkidle', { timeout: 15000 });
+    
+    // Elements sayfasının yüklendiğini kontrol et (sadece açık olan menü)
+    await expect(this.page.locator('.element-list.collapse.show')).toBeVisible({ timeout: 10000 });
     
     // Sayfa yüklenmesi için ek bekleme
     await this.page.waitForTimeout(2000);

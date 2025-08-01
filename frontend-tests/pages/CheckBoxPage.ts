@@ -44,9 +44,27 @@ export class CheckBoxPage {
   }
 
   async clickCheckBoxMenu() {
-    await expect(this.checkBoxMenu).toBeVisible();
+    // Check Box menüsünün görünür olduğunu kontrol et
+    await expect(this.checkBoxMenu).toBeVisible({ timeout: 10000 });
+    
+    // Check Box menüsüne tıkla
     await this.checkBoxMenu.click();
+    
+    // URL'nin değiştiğini kontrol et
     await expect(this.page).toHaveURL(/\/checkbox$/);
+    
+    // Sayfa tamamen yüklenmesini bekle
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    
+    // Check Box sayfasının yüklendiğini kontrol et
+    await expect(this.page.getByRole('heading', { name: 'Check Box' })).toBeVisible({ timeout: 10000 });
+    
+    // Check Box elementlerinin görünür olduğunu kontrol et
+    await expect(this.homeCheckbox).toBeVisible({ timeout: 10000 });
+    
+    // Ek güvenlik için kısa bir bekleme
+    await this.page.waitForTimeout(1000);
   }
 
   async selectHomeCheckbox() {

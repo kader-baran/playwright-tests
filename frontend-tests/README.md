@@ -2,6 +2,10 @@
 
 Bu klasör frontend testlerini içerir.
 
+ npx playwright test frontend-tests/tests/practiceForm.spec.ts
+  npx playwright test frontend-tests/tests/homePage.spec.ts    
+   npx playwright test frontend-tests/tests/homePage.spec.ts --debug
+
 ## Test Örnekleri
 
 ### Form Testleri

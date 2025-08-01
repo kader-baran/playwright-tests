@@ -22,9 +22,27 @@ export class TextBoxPage {
   }
 
   async clickTextBoxMenu() {
-    await expect(this.textBoxMenu).toBeVisible();
+    // Text Box menüsünün görünür olduğunu kontrol et
+    await expect(this.textBoxMenu).toBeVisible({ timeout: 10000 });
+    
+    // Text Box menüsüne tıkla
     await this.textBoxMenu.click();
+    
+    // URL'nin değiştiğini kontrol et
     await expect(this.page).toHaveURL(/\/text-box$/);
+    
+    // Sayfa tamamen yüklenmesini bekle
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    
+    // Text Box sayfasının yüklendiğini kontrol et
+    await expect(this.page.getByRole('heading', { name: 'Text Box' })).toBeVisible({ timeout: 10000 });
+    
+    // Form elementlerinin görünür olduğunu kontrol et
+    await expect(this.fullNameInput).toBeVisible({ timeout: 10000 });
+    
+    // Ek güvenlik için kısa bir bekleme
+    await this.page.waitForTimeout(1000);
   }
 
   async fillForm(fullName: string, email: string, currentAddress: string, permanentAddress: string) {

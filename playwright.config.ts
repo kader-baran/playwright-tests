@@ -4,8 +4,7 @@ export default defineConfig({
   testDir: './frontend-tests',
   fullyParallel: true, // Paralel çalışma için true
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: 2, // İki tarayıcı için 2 worker
+  workers: 1, // İki tarayıcı için 2 worker
   reporter: 'html',
   
   // Debug modu için timeout ayarları
@@ -52,18 +51,18 @@ export default defineConfig({
         }
       },
     },
-    {
-      name: 'firefox',
-      use: { 
-        ...devices['Desktop Firefox'],
-        // Firefox için ek ayarlar
-        launchOptions: {
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-          ]
-        }
-      },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { 
+    //     ...devices['Desktop Firefox'],
+    //     // Firefox için ek ayarlar
+    //     launchOptions: {
+    //       args: [
+    //         '--no-sandbox',
+    //         '--disable-setuid-sandbox'
+    //       ]
+    //     }
+    //   },
+    // },
   ],
 });
