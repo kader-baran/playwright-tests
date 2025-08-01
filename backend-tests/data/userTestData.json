@@ -1,0 +1,86 @@
+{
+  "validUsers": [
+    {
+      "id": 1,
+      "username": "testuser1",
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "testuser1@example.com",
+      "password": "password123",
+      "phone": "1234567890",
+      "userStatus": 1
+    },
+    {
+      "id": 2,
+      "username": "testuser2",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "password": "securepass456",
+      "phone": "0987654321",
+      "userStatus": 0
+    },
+    {
+      "id": 3,
+      "username": "adminuser",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@example.com",
+      "password": "adminpass789",
+      "phone": "5551234567",
+      "userStatus": 1
+    }
+  ],
+  "invalidUsers": [
+    {
+      "id": -1,
+      "username": "",
+      "firstName": null,
+      "lastName": null,
+      "email": "invalid-email",
+      "password": "",
+      "phone": "invalid-phone",
+      "userStatus": -1
+    },
+    {
+      "id": null,
+      "username": null,
+      "firstName": null,
+      "lastName": null,
+      "email": null,
+      "password": null,
+      "phone": null,
+      "userStatus": null
+    }
+  ],
+  "updateUserData": {
+    "firstName": "Updated",
+    "lastName": "Name",
+    "email": "updated@example.com",
+    "phone": "9998887777"
+  },
+  "userArrays": [
+    [
+      {
+        "id": 10,
+        "username": "user10",
+        "firstName": "First",
+        "lastName": "User",
+        "email": "user10@example.com",
+        "password": "pass10",
+        "phone": "1111111111",
+        "userStatus": 1
+      },
+      {
+        "id": 11,
+        "username": "user11",
+        "firstName": "Second",
+        "lastName": "User",
+        "email": "user11@example.com",
+        "password": "pass11",
+        "phone": "2222222222",
+        "userStatus": 0
+      }
+    ]
+  ]
+} 
