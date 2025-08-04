@@ -81,8 +81,11 @@ test.describe('PetStore API - Pet Endpoints (POM Structure)', () => {
       const createdPet = await createResponse.json();
       createdPetIds.push(createdPet.id);
 
+      // Pet'in kaydedilmesi için kısa bir bekleme
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       // Pet'i getir - Retry destekli getirme işlemi kullan
-      const getResponse = await petApiPage.getPetByIdWithRetry(createdPet.id);
+      const getResponse = await petApiPage.getPetByIdWithRetry(createdPet.id, 5, 2000);
       await petApiPage.verifyPetRetrieved(getResponse, createdPet.id);
     });
 

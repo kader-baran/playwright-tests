@@ -1,80 +1,64 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-// Page Object Model (POM) örneği
-export class HomePage {
-  readonly page: Page;
-  readonly elementsCard: Locator;
-  readonly formsCard: Locator;
+export class HomePage extends BasePage {
+  // Locators
+  private elementsCard: Locator;
+  private formsCard: Locator;
+  private widgetsCard: Locator;
+  private interactionsCard: Locator;
+  private bookStoreCard: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-    this.elementsCard = page.locator('.card-body').filter({ hasText: 'Elements' });
-    this.formsCard = page.locator('.card:has-text("Forms")');
+    super(page);
+    this.elementsCard = this.page.locator('.card-body').filter({ hasText: 'Elements' });
+    this.formsCard = this.page.locator('.card-body').filter({ hasText: 'Forms' });
+    this.widgetsCard = this.page.locator('.card-body').filter({ hasText: 'Widgets' });
+    this.interactionsCard = this.page.locator('.card-body').filter({ hasText: 'Interactions' });
+    this.bookStoreCard = this.page.locator('.card-body').filter({ hasText: 'Book Store Application' });
   }
 
-  async goto() {
-    // Base URL'ye git
-    await this.page.goto('https://demoqa.com/');
-    
-    // Sayfanın tamamen yüklenmesini bekle
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
-    
-    
-    // Ana sayfa elementlerinin görünür olduğunu kontrol et
-    await expect(this.page.locator('.card').first()).toBeVisible({ timeout: 10000 });
-    
-    // Ek güvenlik için kısa bir bekleme
-    await this.page.waitForTimeout(1000);
-  }
-
-  async getTitle() {
-    return this.page.title();
-  }
-
-  // Ana sayfada olduğundan emin ol (currentUrl kontrolü)
-  async expectOnHomePage() {
-    await this.page.waitForURL('https://demoqa.com/');
+  async navigateToHome() {
+    await this.navigateTo('https://demoqa.com/');
   }
 
   async clickElementsCard() {
-    // Elements kartının görünür olduğunu kontrol et
-    await expect(this.elementsCard).toBeVisible({ timeout: 10000 });
-    
-    // Fixed banner ve footer'ı kaldır
-    await this.page.evaluate(() => {
-      const fixedBanner = document.getElementById('fixedban');
-      if (fixedBanner) {
-        fixedBanner.remove();
-      }
-      
-      const footer = document.querySelector('footer');
-      if (footer) {
-        footer.remove();
-      }
-    });
-    
-    // Elements kartına tıkla
-    await this.elementsCard.click();
-    
-    // URL'nin değiştiğini kontrol et
-    await expect(this.page).toHaveURL('https://demoqa.com/elements');
-    
-    // Sayfa tamamen yüklenmesini bekle
-    await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForLoadState('networkidle', { timeout: 15000 });
-    
-    // Elements sayfasının yüklendiğini kontrol et (sadece açık olan menü)
-    await expect(this.page.locator('.element-list.collapse.show')).toBeVisible({ timeout: 10000 });
-    
-    // Sayfa yüklenmesi için ek bekleme
-    await this.page.waitForTimeout(2000);
+    await this.clickElement(this.elementsCard);
   }
 
   async clickFormsCard() {
-    await expect(this.formsCard).toBeVisible();
-    await this.formsCard.click();
-    await expect(this.page).toHaveURL('https://demoqa.com/forms');
+    await this.clickElement(this.formsCard);
   }
-}
 
+  async clickWidgetsCard() {
+    await this.clickElement(this.widgetsCard);
+  }
+
+  async clickInteractionsCard() {
+    await this.clickElement(this.interactionsCard);
+  }
+
+  async clickBookStoreCard() {
+    await this.clickElement(this.bookStoreCard);
+  }
+
+  async expectElementsCardVisible() {
+    await this.expectElementVisible(this.elementsCard);
+  }
+
+  async expectFormsCardVisible() {
+    await this.expectElementVisible(this.formsCard);
+  }
+
+  async expectWidgetsCardVisible() {
+    await this.expectElementVisible(this.widgetsCard);
+  }
+
+  async expectInteractionsCardVisible() {
+    await this.expectElementVisible(this.interactionsCard);
+  }
+
+  async expectBookStoreCardVisible() {
+    await this.expectElementVisible(this.bookStoreCard);
+  }
+} 

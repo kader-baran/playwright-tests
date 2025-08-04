@@ -1,65 +1,100 @@
-# Frontend Testleri
+# Frontend Tests - Page Object Model (POM) Structure
 
-Bu klasör frontend testlerini içerir.
+Bu proje, Playwright kullanarak DemoQA sitesi için Page Object Model (POM) yapısında yazılmış frontend testlerini içerir.
 
- npx playwright test frontend-tests/tests/practiceForm.spec.ts
-  npx playwright test frontend-tests/tests/homePage.spec.ts    
-   npx playwright test frontend-tests/tests/homePage.spec.ts --debug
+## Proje Yapısı
 
-## Test Örnekleri
+```
+frontend-tests/
+├── pages/
+│   ├── BasePage.ts          # Temel sayfa fonksiyonları
+│   ├── HomePage.ts          # Ana sayfa işlemleri
+│   ├── ElementsPage.ts      # Elements sayfası işlemleri
+│   └── FormsPage.ts         # Forms sayfası işlemleri
+├── data/
+│   └── testData.ts          # Test verileri
+├── tests/
+│   └── demo.spec.ts         # POM yapısında yazılmış testler
+└── README.md               # Bu dosya
+```
 
-### Form Testleri
+## Page Object Model (POM) Yapısı
 
-- Form validasyonları
-- Input alanları
-- Submit işlemleri
-
-### Sayfa Testleri
-
-- Sayfa yüklenme
-- Navigasyon
-- UI elementleri
-
-### Kullanıcı Etkileşimi Testleri
-
+### BasePage
+Tüm sayfa objelerinin temel sınıfı. Ortak fonksiyonları içerir:
+- Navigasyon işlemleri
+- Element görünürlük kontrolleri
+- Form doldurma işlemleri
 - Tıklama işlemleri
-- Hover efektleri
-- Drag & drop
+- Sayfa ölçeklendirme
 
-## Test Yazma Kuralları
+### HomePage
+Ana sayfa işlemleri:
+- DemoQA ana sayfasına navigasyon
+- Kart tıklama işlemleri (Elements, Forms, Widgets, vb.)
+- Kart görünürlük kontrolleri
 
-1. Her test dosyası `.spec.ts` uzantısı ile bitmelidir
-2. Test isimleri açıklayıcı olmalıdır
-3. Her test bağımsız çalışabilmelidir
-4. Test verilerini temizlemeyi unutmayın
+### ElementsPage
+Elements sayfası işlemleri:
+- TextBox form işlemleri
+- CheckBox işlemleri
+- Radio Button işlemleri
+- Web Tables işlemleri
+- Buttons işlemleri
+- Links işlemleri
 
-## Örnek Test Yapısı
+### FormsPage
+Forms sayfası işlemleri:
+- Practice Form işlemleri
+- Form doldurma işlemleri
+- Dropdown seçim işlemleri
+
+## Test Verileri
+
+`testData.ts` dosyasında tüm test verileri merkezi olarak yönetilir:
+- TextBox form verileri
+- Web Tables form verileri
+- Practice Form verileri
+- Beklenen mesajlar
+
+## Test Çalıştırma
+
+```bash
+# Tüm testleri çalıştır
+npx playwright test
+
+# Belirli bir test dosyasını çalıştır
+npx playwright test demo.spec.ts
+
+# UI modunda çalıştır
+npx playwright test --ui
+```
+
+## POM Avantajları
+
+1. **Bakım Kolaylığı**: Element değişikliklerinde sadece page object'lerde güncelleme yapılır
+2. **Kod Tekrarını Önleme**: Ortak fonksiyonlar BasePage'de tanımlanır
+3. **Okunabilirlik**: Test kodları daha temiz ve anlaşılır
+4. **Yeniden Kullanılabilirlik**: Page object'ler farklı testlerde kullanılabilir
+5. **Merkezi Veri Yönetimi**: Test verileri tek yerden yönetilir
+
+## Örnek Kullanım
 
 ```typescript
-import { test, expect } from "@playwright/test";
-
-test.describe("Sayfa Testleri", () => {
-  test("ana sayfa yüklenir", async ({ page }) => {
-    await page.goto("/");
-    await expect(page).toHaveTitle(/Ana Sayfa/);
-  });
+// Test dosyasında
+test('TextBox testi', async () => {
+  await homePage.navigateToHome();
+  await homePage.clickElementsCard();
+  await elementsPage.clickTextBoxCard();
+  await elementsPage.fillTextBoxForm('test', 'test@test.com', 'address', 'address');
+  await elementsPage.submitTextBoxForm();
+  await elementsPage.expectTextBoxOutputVisible();
 });
 ```
 
-## Proje Yapısı ve POM (Page Object Model)
+## Gelecek Geliştirmeler
 
-- `pages/` : Her bir sayfa için ayrı bir sınıf (ör: HomePage)
-- `components/` : Tekrar kullanılabilir küçük parça objeler (ör: Header)
-- `utils/` : Yardımcı fonksiyonlar
-- `tests/` : Test dosyaları (ör: homePage.spec.ts)
-- `fixtures/` : Test verileri (ör: users.json)
-
-Her sayfa ve component, kendi dosyasında, testler ise ayrı bir klasörde tutulur. Böylece kodun bakımı ve genişletilmesi kolaylaşır.
-
-
-________________________________________________________________________
--- branch oluşturacaksın o branch'te çalışacaksın.
-1. FE POM Structure kurulacak.
-2. Elementler için kontroller sağlanacak. clickMethodu olacak. sendKeys methodu gibigi
-3. baseUrl: https://demoqa.com/
-4. Chrome brpwser + headlessfalse
+- Widgets ve Interactions sayfaları için page object'ler eklenebilir
+- API testleri için ayrı page object'ler oluşturulabilir
+- Test raporlama ve screenshot alma fonksiyonları eklenebilir
+- CI/CD entegrasyonu yapılabilir 

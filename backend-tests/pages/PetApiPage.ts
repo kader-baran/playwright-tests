@@ -150,6 +150,7 @@ export class PetApiPage extends ApiBasePage {
         if (response.status() === 200) {
           return response;
         }
+        console.log(`Attempt ${attempt}: Pet ${petId} returned status ${response.status()}, retrying...`);
       } catch (error) {
         console.log(`Attempt ${attempt}: Pet ${petId} not found, retrying...`);
       }
@@ -160,7 +161,9 @@ export class PetApiPage extends ApiBasePage {
     }
     
     // Son deneme
-    return await this.getPetById(petId);
+    const finalResponse = await this.getPetById(petId);
+    console.log(`Final attempt: Pet ${petId} returned status ${finalResponse.status()}`);
+    return finalResponse;
   }
 
   /**
