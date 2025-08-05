@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import { Page, Locator, expect } from '@playwright/test';
-
-=======
 import { Page, Locator, expect } from "@playwright/test";
 
 // Tüm sayfa sınıfları için temel sınıf
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
 export class BasePage {
   protected page: Page;
 
@@ -13,16 +8,6 @@ export class BasePage {
     this.page = page;
   }
 
-<<<<<<< HEAD
-  async navigateTo(url: string) {
-    await this.page.goto(url);
-  }
-
-  async expectTitle(title: string | RegExp) {
-    await expect(this.page).toHaveTitle(title);
-  }
-
-=======
   // Sayfa yükleme metodları
   async goto(url: string) {
     await this.page.goto(url);
@@ -43,13 +28,10 @@ export class BasePage {
   }
 
   // URL kontrol metodları
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async expectUrl(url: string) {
     await expect(this.page).toHaveURL(url);
   }
 
-<<<<<<< HEAD
-=======
   async expectUrlContains(text: string) {
     await expect(this.page).toHaveURL(new RegExp(text));
   }
@@ -68,30 +50,20 @@ export class BasePage {
   }
 
   // Element görünürlük kontrolü
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async expectElementVisible(locator: Locator) {
     await expect(locator).toBeVisible();
   }
 
-<<<<<<< HEAD
-  async expectElementContainsText(locator: Locator, text: string) {
-    await expect(locator).toContainText(text);
-  }
-
-=======
   async expectElementNotVisible(locator: Locator) {
     await expect(locator).not.toBeVisible();
   }
 
   // Element tıklama
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async clickElement(locator: Locator) {
     await expect(locator).toBeVisible();
     await locator.click();
   }
 
-<<<<<<< HEAD
-=======
   // Element metni alma
   async getElementText(locator: Locator) {
     await expect(locator).toBeVisible();
@@ -99,51 +71,11 @@ export class BasePage {
   }
 
   // Form doldurma
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async fillInput(locator: Locator, text: string) {
     await expect(locator).toBeVisible();
     await locator.fill(text);
   }
 
-<<<<<<< HEAD
-  async doubleClickElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.dblclick();
-  }
-
-  async rightClickElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.click({ button: 'right' });
-  }
-
-  async scalePage(scale: number = 0.75) {
-    await this.page.evaluate((scaleValue) => {
-      document.body.style.transform = `scale(${scaleValue})`;
-      document.body.style.transformOrigin = 'center center';
-      document.body.style.display = 'flex';
-      document.body.style.justifyContent = 'center';
-      document.body.style.alignItems = 'center';
-      document.body.style.minHeight = '100vh';
-    }, scale);
-  }
-
-  async removeAds() {
-    await this.page.evaluate(() => {
-      // Reklam iframe'lerini kaldır
-      const ads = document.querySelectorAll('iframe[src*="google"], iframe[src*="ads"], div[id*="ads"], div[class*="ads"]');
-      ads.forEach(ad => ad.remove());
-      
-      // fixedban div'ini kaldır
-      const fixedban = document.getElementById('fixedban');
-      if (fixedban) fixedban.remove();
-      
-      // Ad-related elements'leri kaldır
-      const adElements = document.querySelectorAll('[id*="google"], [class*="ads"]');
-      adElements.forEach(el => el.remove());
-    });
-  }
-} 
-=======
   async typeInput(locator: Locator, text: string) {
     await expect(locator).toBeVisible();
     await locator.type(text);
@@ -214,5 +146,54 @@ export class BasePage {
     await this.takeScreenshot(`error-${context}-${Date.now()}`);
     throw error;
   }
+
+  // Legacy metodlar (geriye uyumluluk için)
+  async navigateTo(url: string) {
+    await this.goto(url);
+  }
+
+  async expectElementContainsText(locator: Locator, text: string) {
+    await expect(locator).toContainText(text);
+  }
+
+  async doubleClickElement(locator: Locator) {
+    await expect(locator).toBeVisible();
+    await locator.dblclick();
+  }
+
+  async rightClickElement(locator: Locator) {
+    await expect(locator).toBeVisible();
+    await locator.click({ button: "right" });
+  }
+
+  async scalePage(scale: number = 0.75) {
+    await this.page.evaluate((scaleValue) => {
+      document.body.style.transform = `scale(${scaleValue})`;
+      document.body.style.transformOrigin = "center center";
+      document.body.style.display = "flex";
+      document.body.style.justifyContent = "center";
+      document.body.style.alignItems = "center";
+      document.body.style.minHeight = "100vh";
+    }, scale);
+  }
+
+  async removeAds() {
+    await this.page.evaluate(() => {
+      // Reklam iframe'lerini kaldır
+      const ads = document.querySelectorAll(
+        'iframe[src*="google"], iframe[src*="ads"], div[id*="ads"], div[class*="ads"]'
+      );
+      ads.forEach((ad) => ad.remove());
+
+      // fixedban div'ini kaldır
+      const fixedban = document.getElementById("fixedban");
+      if (fixedban) fixedban.remove();
+
+      // Ad-related elements'leri kaldır
+      const adElements = document.querySelectorAll(
+        '[id*="google"], [class*="ads"]'
+      );
+      adElements.forEach((el) => el.remove());
+    });
+  }
 }
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe

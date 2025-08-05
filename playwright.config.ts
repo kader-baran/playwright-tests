@@ -2,20 +2,13 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./frontend-tests",
-  fullyParallel: false, // Sadece Chrome için paralel çalışmayı kapat
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
-<<<<<<< HEAD
-  workers: 1, // İki tarayıcı için 2 worker
-  reporter: 'html',
-  
-  // Debug modu için timeout ayarları
-=======
   retries: process.env.CI ? 2 : 0,
-  workers: 1, // Tek worker ile sıralı çalışma
+  workers: 1,
   reporter: "html",
 
   // Chrome için optimize edilmiş timeout ayarları
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   timeout: 60000,
   expect: {
     timeout: 15000,
@@ -23,14 +16,14 @@ export default defineConfig({
 
   use: {
     baseURL: "https://demoqa.com",
-    headless: false, // Headless modu kapalı - tarayıcıyı görebiliriz
+    headless: false,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
 
     // Chrome için optimize edilmiş ayarlar
     launchOptions: {
-      slowMo: 500, // Her işlem arasında 0.5 saniye bekle
-      devtools: false, // Developer tools'u kapalı tut
+      slowMo: 500,
+      devtools: false,
     },
 
     // Browser context ayarları
@@ -51,29 +44,6 @@ export default defineConfig({
         // Chrome için optimize edilmiş ayarlar
         launchOptions: {
           args: [
-<<<<<<< HEAD
-            '--disable-web-security',
-            '--disable-features=VizDisplayCompositor',
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-          ]
-        }
-      },
-    },
-    // {
-    //   name: 'firefox',
-    //   use: { 
-    //     ...devices['Desktop Firefox'],
-    //     // Firefox için ek ayarlar
-    //     launchOptions: {
-    //       args: [
-    //         '--no-sandbox',
-    //         '--disable-setuid-sandbox'
-    //       ]
-    //     }
-    //   },
-    // },
-=======
             "--disable-web-security",
             "--disable-features=VizDisplayCompositor",
             "--no-sandbox",
@@ -87,6 +57,5 @@ export default defineConfig({
         },
       },
     },
->>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   ],
 });

@@ -1,5 +1,5 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 export class ElementsPage extends BasePage {
   // Locators
@@ -58,94 +58,126 @@ export class ElementsPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    
-    // Main cards
-    this.textBoxCard = this.page.locator('.element-list').locator('li').filter({ hasText: 'Text Box' });
-    this.checkBoxCard = this.page.locator('.element-list').locator('li').filter({ hasText: 'Check Box' });
-    this.radioButtonCard = this.page.locator('.element-list').locator('li').filter({ hasText: 'Radio Button' });
-    this.webTablesCard = this.page.locator('.element-list').locator('li').filter({ hasText: 'Web Tables' });
-    this.buttonsCard = this.page.locator('.element-list').locator('li').filter({ hasText: 'Buttons' });
-    this.linksCard = this.page.locator('li').filter({ hasText: 'Links' }).first();
+
+    // Main cards - Updated locators to be more robust
+    this.textBoxCard = this.page
+      .locator("li")
+      .filter({ hasText: "Text Box" })
+      .first();
+    this.checkBoxCard = this.page
+      .locator("li")
+      .filter({ hasText: "Check Box" })
+      .first();
+    this.radioButtonCard = this.page
+      .locator("li")
+      .filter({ hasText: "Radio Button" })
+      .first();
+    this.webTablesCard = this.page
+      .locator("li")
+      .filter({ hasText: "Web Tables" })
+      .first();
+    this.buttonsCard = this.page
+      .locator("li")
+      .filter({ hasText: "Buttons" })
+      .first();
+    this.linksCard = this.page
+      .locator("li")
+      .filter({ hasText: "Links" })
+      .first();
 
     // TextBox locators
-    this.userNameInput = this.page.locator('#userName');
-    this.userEmailInput = this.page.locator('#userEmail');
-    this.currentAddressInput = this.page.locator('#currentAddress');
-    this.permanentAddressInput = this.page.locator('#permanentAddress');
-    this.submitButton = this.page.locator('#submit');
-    this.outputDiv = this.page.locator('#output');
+    this.userNameInput = this.page.locator("#userName");
+    this.userEmailInput = this.page.locator("#userEmail");
+    this.currentAddressInput = this.page.locator("#currentAddress");
+    this.permanentAddressInput = this.page.locator("#permanentAddress");
+    this.submitButton = this.page.locator("#submit");
+    this.outputDiv = this.page.locator("#output");
 
     // CheckBox locators
-    this.homeCheckbox = this.page.locator('.rct-checkbox').first();
-    this.expandButton = this.page.locator('.rct-icon-expand-close').first();
-    this.collapseButton = this.page.locator('.rct-icon-expand-open').first();
-    this.successText = this.page.locator('.text-success').first();
+    this.homeCheckbox = this.page.locator(".rct-checkbox").first();
+    this.expandButton = this.page.locator(".rct-icon-expand-close").first();
+    this.collapseButton = this.page.locator(".rct-icon-expand-open").first();
+    this.successText = this.page.locator(".text-success").first();
 
     // Radio Button locators
     this.yesLabel = this.page.locator('label[for="yesRadio"]');
     this.impressiveLabel = this.page.locator('label[for="impressiveRadio"]');
-    this.noRadio = this.page.locator('#noRadio');
-    this.successMessage = this.page.locator('.text-success');
+    this.noRadio = this.page.locator("#noRadio");
+    this.successMessage = this.page.locator(".text-success");
 
     // Web Tables locators
-    this.addButton = this.page.locator('#addNewRecordButton');
-    this.firstNameInput = this.page.locator('#firstName');
-    this.lastNameInput = this.page.locator('#lastName');
-    this.emailInput = this.page.locator('#userEmail');
-    this.ageInput = this.page.locator('#age');
-    this.salaryInput = this.page.locator('#salary');
-    this.departmentInput = this.page.locator('#department');
-    this.tableBody = this.page.locator('.rt-tbody');
-    this.modalHeader = this.page.locator('.modal-header');
+    this.addButton = this.page.locator("#addNewRecordButton");
+    this.firstNameInput = this.page.locator("#firstName");
+    this.lastNameInput = this.page.locator("#lastName");
+    this.emailInput = this.page.locator("#userEmail");
+    this.ageInput = this.page.locator("#age");
+    this.salaryInput = this.page.locator("#salary");
+    this.departmentInput = this.page.locator("#department");
+    this.tableBody = this.page.locator(".rt-tbody");
+    this.modalHeader = this.page.locator(".modal-header");
 
     // Buttons locators
-    this.doubleClickButton = this.page.locator('#doubleClickBtn');
-    this.rightClickButton = this.page.locator('#rightClickBtn');
-    this.clickMeButton = this.page.locator('button').filter({ hasText: 'Click Me' }).nth(2);
-    this.doubleClickMessage = this.page.locator('#doubleClickMessage');
-    this.rightClickMessage = this.page.locator('#rightClickMessage');
-    this.dynamicClickMessage = this.page.locator('#dynamicClickMessage');
+    this.doubleClickButton = this.page.locator("#doubleClickBtn");
+    this.rightClickButton = this.page.locator("#rightClickBtn");
+    this.clickMeButton = this.page
+      .locator("button")
+      .filter({ hasText: "Click Me" })
+      .nth(2);
+    this.doubleClickMessage = this.page.locator("#doubleClickMessage");
+    this.rightClickMessage = this.page.locator("#rightClickMessage");
+    this.dynamicClickMessage = this.page.locator("#dynamicClickMessage");
 
     // Links locators
-    this.homeLink = this.page.locator('#simpleLink');
-    this.homeJMqJtLink = this.page.locator('#dynamicLink');
-    this.createdLink = this.page.locator('#created');
-    this.noContentLink = this.page.locator('#no-content');
-    this.linkResponse = this.page.locator('#linkResponse');
+    this.homeLink = this.page.locator("#simpleLink");
+    this.homeJMqJtLink = this.page.locator("#dynamicLink");
+    this.createdLink = this.page.locator("#created");
+    this.noContentLink = this.page.locator("#no-content");
+    this.linkResponse = this.page.locator("#linkResponse");
   }
 
   // Navigation methods
   async navigateToElements() {
-    await this.navigateTo('https://demoqa.com/elements');
+    await this.navigateTo("https://demoqa.com/elements");
   }
 
-  // Card click methods
+  // Card click methods with better error handling
   async clickTextBoxCard() {
+    await this.waitForElement(this.textBoxCard, 10000);
     await this.clickElement(this.textBoxCard);
   }
 
   async clickCheckBoxCard() {
+    await this.waitForElement(this.checkBoxCard, 10000);
     await this.clickElement(this.checkBoxCard);
   }
 
   async clickRadioButtonCard() {
+    await this.waitForElement(this.radioButtonCard, 10000);
     await this.clickElement(this.radioButtonCard);
   }
 
   async clickWebTablesCard() {
+    await this.waitForElement(this.webTablesCard, 10000);
     await this.clickElement(this.webTablesCard);
   }
 
   async clickButtonsCard() {
+    await this.waitForElement(this.buttonsCard, 10000);
     await this.clickElement(this.buttonsCard);
   }
 
   async clickLinksCard() {
+    await this.waitForElement(this.linksCard, 10000);
     await this.clickElement(this.linksCard);
   }
 
   // TextBox methods
-  async fillTextBoxForm(userName: string, userEmail: string, currentAddress: string, permanentAddress: string) {
+  async fillTextBoxForm(
+    userName: string,
+    userEmail: string,
+    currentAddress: string,
+    permanentAddress: string
+  ) {
     await this.fillInput(this.userNameInput, userName);
     await this.fillInput(this.userEmailInput, userEmail);
     await this.fillInput(this.currentAddressInput, currentAddress);
@@ -178,15 +210,15 @@ export class ElementsPage extends BasePage {
   }
 
   async expectNoSuccessText() {
-    await expect(this.page.locator('.text-success')).toHaveCount(0);
+    await expect(this.page.locator(".text-success")).toHaveCount(0);
   }
 
   async expectExpandedNodeVisible() {
-    await this.expectElementVisible(this.page.locator('.rct-node-expanded'));
+    await this.expectElementVisible(this.page.locator(".rct-node-expanded"));
   }
 
   async expectCollapsedNodeVisible() {
-    await this.expectElementVisible(this.page.locator('.rct-node-collapsed'));
+    await this.expectElementVisible(this.page.locator(".rct-node-collapsed"));
   }
 
   // Radio Button methods
@@ -211,7 +243,14 @@ export class ElementsPage extends BasePage {
     await this.clickElement(this.addButton);
   }
 
-  async fillWebTableForm(firstName: string, lastName: string, email: string, age: string, salary: string, department: string) {
+  async fillWebTableForm(
+    firstName: string,
+    lastName: string,
+    email: string,
+    age: string,
+    salary: string,
+    department: string
+  ) {
     await this.fillInput(this.firstNameInput, firstName);
     await this.fillInput(this.lastNameInput, lastName);
     await this.fillInput(this.emailInput, email);
@@ -256,16 +295,16 @@ export class ElementsPage extends BasePage {
   // Links methods
   async clickHomeLink() {
     const [newPage] = await Promise.all([
-      this.page.context().waitForEvent('page'),
-      this.clickElement(this.homeLink)
+      this.page.context().waitForEvent("page"),
+      this.clickElement(this.homeLink),
     ]);
     return newPage;
   }
 
   async clickHomeJMqJtLink() {
     const [newPage] = await Promise.all([
-      this.page.context().waitForEvent('page'),
-      this.clickElement(this.homeJMqJtLink)
+      this.page.context().waitForEvent("page"),
+      this.clickElement(this.homeJMqJtLink),
     ]);
     return newPage;
   }
@@ -281,4 +320,4 @@ export class ElementsPage extends BasePage {
   async expectLinkResponseContains(text: string) {
     await this.expectElementContainsText(this.linkResponse, text);
   }
-} 
+}
