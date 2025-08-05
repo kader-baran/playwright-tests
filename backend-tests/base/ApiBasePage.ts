@@ -11,6 +11,7 @@ export class ApiBasePage {
 
   /**
    * GET request gönderir
+   * test fatih
    */
   async get(endpoint: string, headers?: Record<string, string>) {
     const response = await this.request.get(`${this.baseUrl}${endpoint}`, {
