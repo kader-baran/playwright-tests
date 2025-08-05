@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { PetApiPage, Pet } from '../pages/PetApiPage';
-import * as testData from '../data/petTestData.json';
+import { PetApiPage, Pet } from '../model/PetApiPage';
+import * as testData from '../const/petTestData.json';
 
 test.describe('PetStore API - Pet Endpoints (POM Structure)', () => {
   let petApiPage: PetApiPage;

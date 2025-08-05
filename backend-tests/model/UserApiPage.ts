@@ -1,5 +1,5 @@
 import { APIRequestContext, expect } from '@playwright/test';
-import { ApiBasePage } from './ApiBasePage';
+import { ApiBasePage } from '../base/ApiBasePage';
 
 export interface User {
   id?: number;
@@ -55,6 +55,7 @@ export class UserApiPage extends ApiBasePage {
         if (response.status() === 200) {
           return response;
         }
+        console.log(`Attempt ${attempt}: User ${username} returned status ${response.status()}, retrying...`);
       } catch (error) {
         console.log(`Attempt ${attempt}: User ${username} not found, retrying...`);
       }
@@ -64,8 +65,10 @@ export class UserApiPage extends ApiBasePage {
       }
     }
     
-    // Son deneme
-    return await this.getUserByUsername(username);
+    // Son deneme - eğer hala bulunamazsa 404 döndürür
+    const finalResponse = await this.getUserByUsername(username);
+    console.log(`Final attempt: User ${username} returned status ${finalResponse.status()}`);
+    return finalResponse;
   }
 
   /**

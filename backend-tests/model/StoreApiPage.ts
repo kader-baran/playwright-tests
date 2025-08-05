@@ -1,5 +1,5 @@
 import { APIRequestContext, expect } from '@playwright/test';
-import { ApiBasePage } from './ApiBasePage';
+import { ApiBasePage } from '../base/ApiBasePage';
 
 export interface Order {
   id?: number;

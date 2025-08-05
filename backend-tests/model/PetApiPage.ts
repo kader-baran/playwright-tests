@@ -1,5 +1,5 @@
 import { APIRequestContext, expect } from '@playwright/test';
-import { ApiBasePage } from './ApiBasePage';
+import { ApiBasePage } from '../base/ApiBasePage';
 import * as fs from 'fs';
 import * as path from 'path';
 
