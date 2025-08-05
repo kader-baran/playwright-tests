@@ -5,17 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:frontend": "playwright test frontend-tests/",
-    "test:backend": "playwright test --config=backend-tests/playwright.config.ts",
-    "test:store": "playwright test backend-tests/tests/storeApi.spec.ts --config=backend-tests/playwright.config.ts",
-    "test:pet": "playwright test backend-tests/tests/petApi.spec.ts --config=backend-tests/playwright.config.ts",
-    "test:user": "playwright test backend-tests/tests/userApi.spec.ts --config=backend-tests/playwright.config.ts",
+    "test:backend": "playwright test",
+    "test:frontend": "playwright test --config=frontend-tests/config/playwright.config.ts",
+    "test:store": "playwright test backend-tests/tests/storeApi.spec.ts",
+    "test:pet": "playwright test backend-tests/tests/petApi.spec.ts",
+    "test:user": "playwright test backend-tests/tests/userApi.spec.ts",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --headed --debug",
-    "test:debug-frontend": "playwright test frontend-tests/ --headed --debug",
-    "test:debug-store": "playwright test backend-tests/tests/storeApi.spec.ts --config=backend-tests/playwright.config.ts --headed --debug",
-    "test:debug-user": "playwright test backend-tests/tests/userApi.spec.ts --config=backend-tests/playwright.config.ts --headed --debug",
+
+    "test:debug-store": "playwright test backend-tests/tests/storeApi.spec.ts --headed --debug",
+    "test:debug-user": "playwright test backend-tests/tests/userApi.spec.ts --headed --debug",
+    "test:debug-frontend": "playwright test --config=frontend-tests/config/playwright.config.ts --headed --debug",
     "report": "playwright show-report"
   },
   "keywords": [

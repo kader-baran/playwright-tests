@@ -1,6 +1,5 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
-// Tüm sayfa sınıfları için temel sınıf
 export class BasePage {
   protected page: Page;
 
@@ -8,192 +7,98 @@ export class BasePage {
     this.page = page;
   }
 
-  // Sayfa yükleme metodları
-  async goto(url: string) {
+  /**
+   * Sayfaya git
+   */
+  async navigateTo(url: string) {
     await this.page.goto(url);
+    console.log(`🌐 ${url} sayfasına gidildi`);
   }
 
-  async waitForPageLoad() {
-    try {
-      await this.page.waitForLoadState("domcontentloaded", { timeout: 10000 });
-      await this.page.waitForLoadState("networkidle", { timeout: 15000 });
-    } catch (error) {
-      // Eğer networkidle timeout olursa, sadece domcontentloaded'i bekle
-      console.log("Network idle timeout, continuing with DOM loaded state");
+  /**
+   * Sayfa başlığını kontrol et
+   */
+  async checkPageTitle(expectedTitle: string) {
+    await expect(this.page).toHaveTitle(expectedTitle);
+    console.log(`✅ Sayfa başlığı doğru: ${expectedTitle}`);
+  }
+
+  /**
+   * Element görünür mü kontrol et
+   */
+  async isElementVisible(selector: string): Promise<boolean> {
+    const element = this.page.locator(selector);
+    return await element.isVisible();
+  }
+
+  /**
+   * Element metnini al
+   */
+  async getElementText(selector: string): Promise<string> {
+    const element = this.page.locator(selector);
+    return await element.textContent() || '';
+  }
+
+  /**
+   * Element sayısını al
+   */
+  async getElementCount(selector: string): Promise<number> {
+    const elements = this.page.locator(selector);
+    return await elements.count();
+  }
+
+  /**
+   * Sayfa URL'sini kontrol et
+   */
+  async checkUrl(expectedUrl: string) {
+    await expect(this.page).toHaveURL(expectedUrl);
+    console.log(`✅ URL doğru: ${expectedUrl}`);
+  }
+
+  /**
+   * Sayfa içeriğini kontrol et
+   */
+  async checkPageContent(expectedText: string) {
+    const content = await this.page.content();
+    if (content.includes(expectedText)) {
+      console.log(`✅ Sayfada "${expectedText}" metni bulundu`);
+    } else {
+      console.log(`⚠️ Sayfada "${expectedText}" metni bulunamadı`);
     }
   }
 
+  /**
+   * Bekleme işlemi
+   */
   async waitForTimeout(ms: number) {
     await this.page.waitForTimeout(ms);
+    console.log(`⏱️ ${ms}ms beklendi`);
   }
 
-  // URL kontrol metodları
-  async expectUrl(url: string) {
-    await expect(this.page).toHaveURL(url);
-  }
-
-  async expectUrlContains(text: string) {
-    await expect(this.page).toHaveURL(new RegExp(text));
-  }
-
-  // Sayfa başlığı metodları
-  async getTitle() {
-    return this.page.title();
-  }
-
-  async expectTitle(title: string) {
-    await expect(this.page).toHaveTitle(title);
-  }
-
-  async expectTitleContains(text: string) {
-    await expect(this.page).toHaveTitle(new RegExp(text));
-  }
-
-  // Element görünürlük kontrolü
-  async expectElementVisible(locator: Locator) {
-    await expect(locator).toBeVisible();
-  }
-
-  async expectElementNotVisible(locator: Locator) {
-    await expect(locator).not.toBeVisible();
-  }
-
-  // Element tıklama
-  async clickElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.click();
-  }
-
-  // Element metni alma
-  async getElementText(locator: Locator) {
-    await expect(locator).toBeVisible();
-    return locator.textContent();
-  }
-
-  // Form doldurma
-  async fillInput(locator: Locator, text: string) {
-    await expect(locator).toBeVisible();
-    await locator.fill(text);
-  }
-
-  async typeInput(locator: Locator, text: string) {
-    await expect(locator).toBeVisible();
-    await locator.type(text);
-  }
-
-  // Checkbox/Radio button işlemleri
-  async checkElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.check();
-  }
-
-  async uncheckElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.uncheck();
-  }
-
-  async expectElementChecked(locator: Locator) {
-    await expect(locator).toBeChecked();
-  }
-
-  async expectElementNotChecked(locator: Locator) {
-    await expect(locator).not.toBeChecked();
-  }
-
-  // Dropdown işlemleri
-  async selectOption(locator: Locator, value: string) {
-    await expect(locator).toBeVisible();
-    await locator.selectOption(value);
-  }
-
-  async selectOptionByLabel(locator: Locator, label: string) {
-    await expect(locator).toBeVisible();
-    await locator.selectOption({ label });
-  }
-
-  // Screenshot alma
+  /**
+   * Screenshot al
+   */
   async takeScreenshot(name: string) {
     await this.page.screenshot({ path: `screenshots/${name}.png` });
+    console.log(`📸 Screenshot alındı: ${name}`);
   }
 
-  // Sayfa scroll işlemleri
-  async scrollToElement(locator: Locator) {
-    await locator.scrollIntoViewIfNeeded();
+  /**
+   * Yeni sayfa açılmasını bekle
+   */
+  async waitForNewPage(): Promise<Page> {
+    const pagePromise = this.page.context().waitForEvent('page');
+    return pagePromise;
   }
 
-  async scrollToTop() {
-    await this.page.evaluate(() => window.scrollTo(0, 0));
+  /**
+   * Linke tıkla ve yeni sayfayı bekle
+   */
+  async clickLinkAndWaitForNewPage(linkSelector: string): Promise<Page> {
+    const pagePromise = this.waitForNewPage();
+    await this.page.locator(linkSelector).click();
+    const newPage = await pagePromise;
+    await newPage.waitForLoadState('networkidle');
+    return newPage;
   }
-
-  async scrollToBottom() {
-    await this.page.evaluate(() =>
-      window.scrollTo(0, document.body.scrollHeight)
-    );
-  }
-
-  // Bekleme metodları
-  async waitForElement(locator: Locator, timeout = 10000) {
-    await locator.waitFor({ timeout });
-  }
-
-  async waitForElementToBeVisible(locator: Locator, timeout = 10000) {
-    await expect(locator).toBeVisible({ timeout });
-  }
-
-  // Hata yakalama
-  async handleError(error: Error, context: string) {
-    console.error(`Error in ${context}:`, error.message);
-    await this.takeScreenshot(`error-${context}-${Date.now()}`);
-    throw error;
-  }
-
-  // Legacy metodlar (geriye uyumluluk için)
-  async navigateTo(url: string) {
-    await this.goto(url);
-  }
-
-  async expectElementContainsText(locator: Locator, text: string) {
-    await expect(locator).toContainText(text);
-  }
-
-  async doubleClickElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.dblclick();
-  }
-
-  async rightClickElement(locator: Locator) {
-    await expect(locator).toBeVisible();
-    await locator.click({ button: "right" });
-  }
-
-  async scalePage(scale: number = 0.75) {
-    await this.page.evaluate((scaleValue) => {
-      document.body.style.transform = `scale(${scaleValue})`;
-      document.body.style.transformOrigin = "center center";
-      document.body.style.display = "flex";
-      document.body.style.justifyContent = "center";
-      document.body.style.alignItems = "center";
-      document.body.style.minHeight = "100vh";
-    }, scale);
-  }
-
-  async removeAds() {
-    await this.page.evaluate(() => {
-      // Reklam iframe'lerini kaldır
-      const ads = document.querySelectorAll(
-        'iframe[src*="google"], iframe[src*="ads"], div[id*="ads"], div[class*="ads"]'
-      );
-      ads.forEach((ad) => ad.remove());
-
-      // fixedban div'ini kaldır
-      const fixedban = document.getElementById("fixedban");
-      if (fixedban) fixedban.remove();
-
-      // Ad-related elements'leri kaldır
-      const adElements = document.querySelectorAll(
-        '[id*="google"], [class*="ads"]'
-      );
-      adElements.forEach((el) => el.remove());
-    });
-  }
-}
+} 

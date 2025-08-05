@@ -1,60 +1,32 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./frontend-tests",
+  testDir: "./backend-tests/tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
   reporter: "html",
 
-  // Chrome için optimize edilmiş timeout ayarları
-  timeout: 60000,
+  // API testleri için timeout ayarları
+  timeout: 30000,
   expect: {
-    timeout: 15000,
+    timeout: 10000,
   },
 
   use: {
-    baseURL: "https://demoqa.com",
-    headless: false,
+    // API testleri için headless mod
+    headless: true,
     trace: "on-first-retry",
-    screenshot: "only-on-failure",
-
-    // Chrome için optimize edilmiş ayarlar
-    launchOptions: {
-      slowMo: 500,
-      devtools: false,
-    },
-
-    // Browser context ayarları
-    viewport: { width: 1920, height: 1080 },
-    ignoreHTTPSErrors: true,
-
-    // Chrome için optimize edilmiş timeout'lar
-    actionTimeout: 20000,
-    navigationTimeout: 30000,
   },
 
-  // Sadece Chrome ile test çalıştırmak için:
+  // API testleri için proje ayarları
   projects: [
     {
-      name: "chromium",
+      name: "api-tests",
       use: {
-        ...devices["Desktop Chrome"],
-        // Chrome için optimize edilmiş ayarlar
-        launchOptions: {
-          args: [
-            "--disable-web-security",
-            "--disable-features=VizDisplayCompositor",
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-gpu",
-            "--disable-background-timer-throttling",
-            "--disable-backgrounding-occluded-windows",
-            "--disable-renderer-backgrounding",
-          ],
-        },
+        // API testleri için özel ayarlar
+        baseURL: "https://petstore.swagger.io/v2",
       },
     },
   ],
