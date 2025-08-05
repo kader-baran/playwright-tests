@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import { Page, Locator, expect } from '@playwright/test';
 
+=======
+import { Page, Locator, expect } from "@playwright/test";
+
+// Tüm sayfa sınıfları için temel sınıf
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
 export class BasePage {
   protected page: Page;
 
@@ -7,6 +13,7 @@ export class BasePage {
     this.page = page;
   }
 
+<<<<<<< HEAD
   async navigateTo(url: string) {
     await this.page.goto(url);
   }
@@ -15,28 +22,90 @@ export class BasePage {
     await expect(this.page).toHaveTitle(title);
   }
 
+=======
+  // Sayfa yükleme metodları
+  async goto(url: string) {
+    await this.page.goto(url);
+  }
+
+  async waitForPageLoad() {
+    try {
+      await this.page.waitForLoadState("domcontentloaded", { timeout: 10000 });
+      await this.page.waitForLoadState("networkidle", { timeout: 15000 });
+    } catch (error) {
+      // Eğer networkidle timeout olursa, sadece domcontentloaded'i bekle
+      console.log("Network idle timeout, continuing with DOM loaded state");
+    }
+  }
+
+  async waitForTimeout(ms: number) {
+    await this.page.waitForTimeout(ms);
+  }
+
+  // URL kontrol metodları
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async expectUrl(url: string) {
     await expect(this.page).toHaveURL(url);
   }
 
+<<<<<<< HEAD
+=======
+  async expectUrlContains(text: string) {
+    await expect(this.page).toHaveURL(new RegExp(text));
+  }
+
+  // Sayfa başlığı metodları
+  async getTitle() {
+    return this.page.title();
+  }
+
+  async expectTitle(title: string) {
+    await expect(this.page).toHaveTitle(title);
+  }
+
+  async expectTitleContains(text: string) {
+    await expect(this.page).toHaveTitle(new RegExp(text));
+  }
+
+  // Element görünürlük kontrolü
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async expectElementVisible(locator: Locator) {
     await expect(locator).toBeVisible();
   }
 
+<<<<<<< HEAD
   async expectElementContainsText(locator: Locator, text: string) {
     await expect(locator).toContainText(text);
   }
 
+=======
+  async expectElementNotVisible(locator: Locator) {
+    await expect(locator).not.toBeVisible();
+  }
+
+  // Element tıklama
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async clickElement(locator: Locator) {
     await expect(locator).toBeVisible();
     await locator.click();
   }
 
+<<<<<<< HEAD
+=======
+  // Element metni alma
+  async getElementText(locator: Locator) {
+    await expect(locator).toBeVisible();
+    return locator.textContent();
+  }
+
+  // Form doldurma
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
   async fillInput(locator: Locator, text: string) {
     await expect(locator).toBeVisible();
     await locator.fill(text);
   }
 
+<<<<<<< HEAD
   async doubleClickElement(locator: Locator) {
     await expect(locator).toBeVisible();
     await locator.dblclick();
@@ -74,3 +143,76 @@ export class BasePage {
     });
   }
 } 
+=======
+  async typeInput(locator: Locator, text: string) {
+    await expect(locator).toBeVisible();
+    await locator.type(text);
+  }
+
+  // Checkbox/Radio button işlemleri
+  async checkElement(locator: Locator) {
+    await expect(locator).toBeVisible();
+    await locator.check();
+  }
+
+  async uncheckElement(locator: Locator) {
+    await expect(locator).toBeVisible();
+    await locator.uncheck();
+  }
+
+  async expectElementChecked(locator: Locator) {
+    await expect(locator).toBeChecked();
+  }
+
+  async expectElementNotChecked(locator: Locator) {
+    await expect(locator).not.toBeChecked();
+  }
+
+  // Dropdown işlemleri
+  async selectOption(locator: Locator, value: string) {
+    await expect(locator).toBeVisible();
+    await locator.selectOption(value);
+  }
+
+  async selectOptionByLabel(locator: Locator, label: string) {
+    await expect(locator).toBeVisible();
+    await locator.selectOption({ label });
+  }
+
+  // Screenshot alma
+  async takeScreenshot(name: string) {
+    await this.page.screenshot({ path: `screenshots/${name}.png` });
+  }
+
+  // Sayfa scroll işlemleri
+  async scrollToElement(locator: Locator) {
+    await locator.scrollIntoViewIfNeeded();
+  }
+
+  async scrollToTop() {
+    await this.page.evaluate(() => window.scrollTo(0, 0));
+  }
+
+  async scrollToBottom() {
+    await this.page.evaluate(() =>
+      window.scrollTo(0, document.body.scrollHeight)
+    );
+  }
+
+  // Bekleme metodları
+  async waitForElement(locator: Locator, timeout = 10000) {
+    await locator.waitFor({ timeout });
+  }
+
+  async waitForElementToBeVisible(locator: Locator, timeout = 10000) {
+    await expect(locator).toBeVisible({ timeout });
+  }
+
+  // Hata yakalama
+  async handleError(error: Error, context: string) {
+    console.error(`Error in ${context}:`, error.message);
+    await this.takeScreenshot(`error-${context}-${Date.now()}`);
+    throw error;
+  }
+}
+>>>>>>> 8548971d4fddb30d74cac23cf8706e107711b8fe
