@@ -1,33 +1,22 @@
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./backend-tests/tests",
-  fullyParallel: false,
+  testDir: './tests',
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
-  reporter: "html",
-
-  // API testleri için timeout ayarları
-  timeout: 30000,
-  expect: {
-    timeout: 10000,
-  },
-
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
   use: {
-    // API testleri için headless mod
-    headless: true,
-    trace: "on-first-retry",
+    baseURL: 'https://the-internet.herokuapp.com',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure'
   },
-
-  // API testleri için proje ayarları
   projects: [
     {
-      name: "api-tests",
-      use: {
-        // API testleri için özel ayarlar
-        baseURL: "https://petstore.swagger.io/v2",
-      },
-    },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    }
   ],
-});
+}); 
