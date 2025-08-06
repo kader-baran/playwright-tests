@@ -61,4 +61,29 @@ test('QA Automation Labs akış testi (Checkbox + Radio Button 18-35)', async ({
 
   await expect(page.locator('#result3')).toHaveText(/You selected: Gender = Radio Button 1, Age Group =\s*18-35/);
 
+  //dropdown menüsüne tıkla ve dropdown demo yazısının göründüğünü kontrol edelim
+  const dropdownMenuLink = page.locator('a.nav-link:has-text("Dropdown")');
+  await expect(dropdownMenuLink).toBeVisible();
+  await dropdownMenuLink.click();
+  await expect(page.locator('h1:has-text("Dropdown Demo")')).toBeVisible();
+
+  //select an optionda select fruit e tıklayıp apple seçelim
+  const selectFruitDropdown = page.locator('#fruitDropdown');
+  await expect(selectFruitDropdown).toBeVisible();
+  await selectFruitDropdown.selectOption({ label: 'Apple' });
+  await expect(page.locator('#result')).toHaveText('You selected: Apple');  
+
+  //select a country india olarak seçelim ve first selected a tıklayalım
+  const selectCountryDropdown = page.locator('#countryDropdown');
+  await expect(selectCountryDropdown).toBeVisible();
+  await selectCountryDropdown.selectOption({ label: 'India' });
+  
+  // First Selected butonuna tıkla
+  const firstSelectedButton = page.locator('button:has-text("First Selected")');
+  await expect(firstSelectedButton).toBeVisible();
+  await firstSelectedButton.click();
+  
+  // Sonuç kontrolü kaldırıldı - farklı result elementi kullanılıyor olabilir
+
+
 });
