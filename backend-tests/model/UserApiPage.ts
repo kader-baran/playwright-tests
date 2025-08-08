@@ -1,5 +1,6 @@
-import { APIRequestContext, expect } from '@playwright/test';
-import { ApiBasePage } from '../base/ApiBasePage';
+import { APIRequestContext, expect } from "@playwright/test";
+import { ApiBasePage } from "../base/ApiBasePage";
+import { Logger } from "../utils/Logger";
 
 export interface User {
   id?: number;
@@ -21,21 +22,21 @@ export class UserApiPage extends ApiBasePage {
    * Yeni kullanıcı oluşturur
    */
   async createUser(userData: User) {
-    return await this.post('/user', userData);
+    return await this.post("/user", userData);
   }
 
   /**
    * Birden fazla kullanıcı oluşturur
    */
   async createUsersWithArray(userArray: User[]) {
-    return await this.post('/user/createWithArray', userArray);
+    return await this.post("/user/createWithArray", userArray);
   }
 
   /**
    * Birden fazla kullanıcı oluşturur (List ile)
    */
   async createUsersWithList(userList: User[]) {
-    return await this.post('/user/createWithList', userList);
+    return await this.post("/user/createWithList", userList);
   }
 
   /**
@@ -48,26 +49,36 @@ export class UserApiPage extends ApiBasePage {
   /**
    * Kullanıcıyı username ile getirir (Retry destekli)
    */
-  async getUserByUsernameWithRetry(username: string, maxRetries: number = 3, delay: number = 1000) {
+  async getUserByUsernameWithRetry(
+    username: string,
+    maxRetries: number = 3,
+    delay: number = 1000
+  ) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const response = await this.getUserByUsername(username);
         if (response.status() === 200) {
           return response;
         }
-        console.log(`Attempt ${attempt}: User ${username} returned status ${response.status()}, retrying...`);
+        Logger.warn(
+          `Attempt ${attempt}: User ${username} returned status ${response.status()}, retrying...`
+        );
       } catch (error) {
-        console.log(`Attempt ${attempt}: User ${username} not found, retrying...`);
+        Logger.warn(
+          `Attempt ${attempt}: User ${username} not found, retrying...`
+        );
       }
-      
+
       if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
-    
+
     // Son deneme - eğer hala bulunamazsa 404 döndürür
     const finalResponse = await this.getUserByUsername(username);
-    console.log(`Final attempt: User ${username} returned status ${finalResponse.status()}`);
+    Logger.info(
+      `Final attempt: User ${username} returned status ${finalResponse.status()}`
+    );
     return finalResponse;
   }
 
@@ -89,14 +100,16 @@ export class UserApiPage extends ApiBasePage {
    * Kullanıcı girişi yapar
    */
   async loginUser(username: string, password: string) {
-    return await this.get(`/user/login?username=${username}&password=${password}`);
+    return await this.get(
+      `/user/login?username=${username}&password=${password}`
+    );
   }
 
   /**
    * Kullanıcı çıkışı yapar
    */
   async logoutUser() {
-    return await this.get('/user/logout');
+    return await this.get("/user/logout");
   }
 
   /**
@@ -104,14 +117,14 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyUserCreated(response: any, expectedUser: User) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(200);
-    expect(responseBody.type).toBe('unknown');
+    expect(responseBody.type).toBe("unknown");
   }
 
   /**
@@ -119,9 +132,9 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyUserRetrieved(response: any, expectedUsername: string) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('username');
+    expect(responseBody).toHaveProperty("username");
     expect(responseBody.username).toBe(expectedUsername);
   }
 
@@ -130,14 +143,14 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyUserUpdated(response: any, expectedUser: User) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(200);
-    expect(responseBody.type).toBe('unknown');
+    expect(responseBody.type).toBe("unknown");
   }
 
   /**
@@ -145,14 +158,14 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyUserDeleted(response: any) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(200);
-    expect(responseBody.type).toBe('unknown');
+    expect(responseBody.type).toBe("unknown");
   }
 
   /**
@@ -174,15 +187,15 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyLoginSuccess(response: any) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(200);
-    expect(responseBody.type).toBe('unknown');
-    expect(responseBody.message).toContain('logged in user session:');
+    expect(responseBody.type).toBe("unknown");
+    expect(responseBody.message).toContain("logged in user session:");
   }
 
   /**
@@ -190,14 +203,14 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyLoginFailure(response: any) {
     await this.expectStatus(response, 400);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(400);
-    expect(responseBody.type).toBe('error');
+    expect(responseBody.type).toBe("error");
   }
 
   /**
@@ -205,29 +218,33 @@ export class UserApiPage extends ApiBasePage {
    */
   async verifyLogoutSuccess(response: any) {
     await this.expectStatus(response, 200);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('code');
-    expect(responseBody).toHaveProperty('type');
-    expect(responseBody).toHaveProperty('message');
-    
+    expect(responseBody).toHaveProperty("code");
+    expect(responseBody).toHaveProperty("type");
+    expect(responseBody).toHaveProperty("message");
+
     expect(responseBody.code).toBe(200);
-    expect(responseBody.type).toBe('unknown');
-    expect(responseBody.message).toBe('ok');
+    expect(responseBody.type).toBe("unknown");
+    expect(responseBody.message).toBe("ok");
   }
 
   /**
    * Örnek kullanıcı oluşturur
    */
-  createSampleUser(username: string, email: string = 'test@example.com', userStatus: number = 1): User {
+  createSampleUser(
+    username: string,
+    email: string = "test@example.com",
+    userStatus: number = 1
+  ): User {
     return {
       username: username,
-      firstName: 'Test',
-      lastName: 'User',
+      firstName: "Test",
+      lastName: "User",
       email: email,
-      password: 'password123',
-      phone: '1234567890',
-      userStatus: userStatus
+      password: "password123",
+      phone: "1234567890",
+      userStatus: userStatus,
     };
   }
 
@@ -235,8 +252,8 @@ export class UserApiPage extends ApiBasePage {
    * Farklı status'lerde örnek kullanıcılar oluşturur
    */
   createSampleUsersWithDifferentStatuses(usernames: string[]): User[] {
-    return usernames.map((username, index) => 
+    return usernames.map((username, index) =>
       this.createSampleUser(username, `${username}@example.com`, index % 2)
     );
   }
-} 
+}

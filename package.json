@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:backend": "playwright test",
+    "test:backend": "playwright test --config=backend-tests/config/playwright.config.ts",
     "test:frontend": "playwright test --config=frontend-tests/config/playwright.config.ts",
     "test:store": "playwright test backend-tests/tests/storeApi.spec.ts",
     "test:pet": "playwright test backend-tests/tests/petApi.spec.ts",

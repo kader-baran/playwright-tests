@@ -1,7 +1,8 @@
-import { APIRequestContext, expect } from '@playwright/test';
-import { ApiBasePage } from '../base/ApiBasePage';
-import * as fs from 'fs';
-import * as path from 'path';
+import { APIRequestContext, expect } from "@playwright/test";
+import { ApiBasePage } from "../base/ApiBasePage";
+import { Logger } from "../utils/Logger";
+import * as fs from "fs";
+import * as path from "path";
 
 export interface Pet {
   id?: number;
@@ -15,7 +16,7 @@ export interface Pet {
     id: number;
     name: string;
   }[];
-  status: 'available' | 'pending' | 'sold';
+  status: "available" | "pending" | "sold";
 }
 
 export class PetApiPage extends ApiBasePage {
@@ -27,7 +28,7 @@ export class PetApiPage extends ApiBasePage {
    * Yeni pet oluşturur
    */
   async createPet(petData: Pet) {
-    return await this.post('/pet', petData);
+    return await this.post("/pet", petData);
   }
 
   /**
@@ -41,7 +42,7 @@ export class PetApiPage extends ApiBasePage {
    * Pet'i günceller
    */
   async updatePet(petData: Pet) {
-    return await this.put('/pet', petData);
+    return await this.put("/pet", petData);
   }
 
   /**
@@ -56,14 +57,14 @@ export class PetApiPage extends ApiBasePage {
    */
   async updatePetWithFormData(petId: number, name: string, status: string) {
     const formData = new URLSearchParams();
-    formData.append('name', name);
-    formData.append('status', status);
+    formData.append("name", name);
+    formData.append("status", status);
 
     const response = await this.request.post(`${this.baseUrl}/pet/${petId}`, {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      data: formData.toString()
+      data: formData.toString(),
     });
     return response;
   }
@@ -73,38 +74,48 @@ export class PetApiPage extends ApiBasePage {
    * Not: Playwright ortamında FormData doğrudan çalışmayabilir
    * Bu durumda fs.createReadStream kullanılır
    */
-  async uploadPetImage(petId: number, filePath: string, additionalMetadata?: string) {
+  async uploadPetImage(
+    petId: number,
+    filePath: string,
+    additionalMetadata?: string
+  ) {
     try {
       // Dosyanın var olup olmadığını kontrol et
       const fullPath = path.resolve(filePath);
       if (!fs.existsSync(fullPath)) {
         // Dosya yoksa, test dosyası oluştur
-        const testImageContent = 'fake image content for testing';
+        const testImageContent = "fake image content for testing";
         fs.writeFileSync(fullPath, testImageContent);
       }
 
       // Playwright'te FormData ile dosya yükleme için alternatif yöntem
-      const response = await this.request.post(`${this.baseUrl}/pet/${petId}/uploadImage`, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        data: {
-          file: fs.createReadStream(fullPath),
-          additionalMetadata: additionalMetadata || ''
+      const response = await this.request.post(
+        `${this.baseUrl}/pet/${petId}/uploadImage`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: {
+            file: fs.createReadStream(fullPath),
+            additionalMetadata: additionalMetadata || "",
+          },
         }
-      });
+      );
       return response;
     } catch (error) {
-      console.log('Dosya yükleme hatası:', error);
+      console.log("Dosya yükleme hatası:", error);
       // Hata durumunda basit bir response döndür
-      const response = await this.request.post(`${this.baseUrl}/pet/${petId}/uploadImage`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          error: 'File upload failed'
+      const response = await this.request.post(
+        `${this.baseUrl}/pet/${petId}/uploadImage`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            error: "File upload failed",
+          },
         }
-      });
+      );
       return response;
     }
   }
@@ -112,7 +123,7 @@ export class PetApiPage extends ApiBasePage {
   /**
    * Status'a göre pet'leri getirir
    */
-  async getPetsByStatus(status: 'available' | 'pending' | 'sold') {
+  async getPetsByStatus(status: "available" | "pending" | "sold") {
     return await this.get(`/pet/findByStatus?status=${status}`);
   }
 
@@ -143,26 +154,34 @@ export class PetApiPage extends ApiBasePage {
   /**
    * Retry destekli pet getirme işlemi
    */
-  async getPetByIdWithRetry(petId: number, maxRetries: number = 3, delay: number = 1000) {
+  async getPetByIdWithRetry(
+    petId: number,
+    maxRetries: number = 3,
+    delay: number = 1000
+  ) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const response = await this.getPetById(petId);
         if (response.status() === 200) {
           return response;
         }
-        console.log(`Attempt ${attempt}: Pet ${petId} returned status ${response.status()}, retrying...`);
+        console.log(
+          `Attempt ${attempt}: Pet ${petId} returned status ${response.status()}, retrying...`
+        );
       } catch (error) {
-        console.log(`Attempt ${attempt}: Pet ${petId} not found, retrying...`);
+        Logger.warn(`Attempt ${attempt}: Pet ${petId} not found, retrying...`);
       }
-      
+
       if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
-    
+
     // Son deneme
     const finalResponse = await this.getPetById(petId);
-    console.log(`Final attempt: Pet ${petId} returned status ${finalResponse.status()}`);
+    Logger.info(
+      `Final attempt: Pet ${petId} returned status ${finalResponse.status()}`
+    );
     return finalResponse;
   }
 
@@ -172,7 +191,7 @@ export class PetApiPage extends ApiBasePage {
   async verifyPetUpdated(response: any, expectedPet: Pet) {
     await this.expectStatus(response, 200);
     const responseBody = await response.json();
-    
+
     // PetStore API güncelleme işlemini beklendiği gibi yapmayabilir
     // Bu durumda orijinal değerleri koruyabilir, bu yüzden her iki durumu da kabul ediyoruz
     // API'nin döndürdüğü değer ile beklenen değer arasında uyum varsa kabul et
@@ -182,9 +201,9 @@ export class PetApiPage extends ApiBasePage {
     if (responseBody.status === expectedPet.status) {
       expect(responseBody.status).toBe(expectedPet.status);
     }
-    
+
     expect(responseBody.photoUrls).toEqual(expectedPet.photoUrls);
-    
+
     // ID varsa kontrol et
     if (expectedPet.id) {
       expect(responseBody.id).toBe(expectedPet.id);
@@ -225,22 +244,25 @@ export class PetApiPage extends ApiBasePage {
   /**
    * Test için örnek pet verisi oluşturur
    */
-  createSamplePet(name: string, status: 'available' | 'pending' | 'sold' = 'available'): Pet {
+  createSamplePet(
+    name: string,
+    status: "available" | "pending" | "sold" = "available"
+  ): Pet {
     return {
       id: Date.now() + Math.floor(Math.random() * 1000), // Benzersiz ID üret
       name: name,
-      photoUrls: ['https://example.com/photo1.jpg'],
+      photoUrls: ["https://example.com/photo1.jpg"],
       status: status,
       category: {
         id: 1,
-        name: 'Dogs'
+        name: "Dogs",
       },
       tags: [
         {
           id: 1,
-          name: 'friendly'
-        }
-      ]
+          name: "friendly",
+        },
+      ],
     };
   }
 
@@ -248,8 +270,14 @@ export class PetApiPage extends ApiBasePage {
    * Farklı status'lerde örnek pet'ler oluşturur
    */
   createSamplePetsWithDifferentStatuses(names: string[]): Pet[] {
-    return names.map((name, index) => 
-      this.createSamplePet(name, ['available', 'pending', 'sold'][index % 3] as 'available' | 'pending' | 'sold')
+    return names.map((name, index) =>
+      this.createSamplePet(
+        name,
+        ["available", "pending", "sold"][index % 3] as
+          | "available"
+          | "pending"
+          | "sold"
+      )
     );
   }
 
@@ -257,7 +285,7 @@ export class PetApiPage extends ApiBasePage {
    * Test verisi oluşturucu - POM standartlarına uygun
    */
   createTestData(): Pet {
-    return this.createSamplePet('Test Pet', 'available');
+    return this.createSamplePet("Test Pet", "available");
   }
 
   /**
@@ -265,12 +293,12 @@ export class PetApiPage extends ApiBasePage {
    */
   async verifyTestData(response: any, expectedData: Pet): Promise<void> {
     await this.expectSuccess(response);
-    
+
     const responseBody = await response.json();
-    expect(responseBody).toHaveProperty('id');
-    expect(responseBody).toHaveProperty('name');
-    expect(responseBody).toHaveProperty('status');
-    
+    expect(responseBody).toHaveProperty("id");
+    expect(responseBody).toHaveProperty("name");
+    expect(responseBody).toHaveProperty("status");
+
     if (expectedData.name) {
       expect(responseBody.name).toBe(expectedData.name);
     }
@@ -286,19 +314,19 @@ export class PetApiPage extends ApiBasePage {
     // CREATE
     const createResponse = await this.createPet(petData);
     await this.verifyPetCreated(createResponse, petData);
-    
+
     const createdPet = await createResponse.json();
     const petId = createdPet.id;
-    
+
     // READ
     const getResponse = await this.getPetByIdWithRetry(petId);
     await this.verifyPetRetrieved(getResponse, petId);
-    
+
     // UPDATE
-    const updatedPet = { ...petData, name: 'Updated ' + petData.name };
+    const updatedPet = { ...petData, name: "Updated " + petData.name };
     const updateResponse = await this.updatePet(updatedPet);
     await this.verifyPetUpdated(updateResponse, updatedPet);
-    
+
     // DELETE
     const deleteResponse = await this.deletePet(petId);
     await this.verifyPetDeleted(deleteResponse);
@@ -312,9 +340,9 @@ export class PetApiPage extends ApiBasePage {
     const nonExistentPetId = 999999;
     const getResponse = await this.getPetById(nonExistentPetId);
     await this.verifyPetNotFound(getResponse);
-    
+
     // Geçersiz pet ID ile silme - PetStore API 200 veya 404 döndürebilir
     const deleteResponse = await this.deletePet(-1);
     expect([200, 404]).toContain(deleteResponse.status());
   }
-} 
+}

@@ -1,105 +1,54 @@
-# Frontend Tests - POM Structure
+# Frontend UI Tests (POM)
 
-Bu klasör, Page Object Model (POM) yapısına uygun frontend testlerini içerir.
+Page Object Model (POM) ile yazılmış UI testleri. Typed fixtures ile Page Object’ler testlere otomatik enjekte edilir. Özel reporter ve renkli adım logları içerir.
 
-## 📁 Klasör Yapısı
+## Klasör Yapısı
 
 ```
 frontend-tests/
-├── pages/            # Page Object sınıfları (POM)
-├── tests/            # Spec dosyaları (örn: TC_01_checkbox.spec.ts)
-├── data/             # Test verileri
-├── config/           # Playwright konfigürasyonu
-├── fixtures/         # Typed test fixture'ları (POM enjekte eder)
-├── utils/            # Yardımcılar (örn: Logger)
-└── reporters/        # Özel raporlayıcılar (özet konsol çıktısı)
+├── pages/       # Page Object'ler (BasePage + sayfa sınıfları)
+├── tests/       # Spec dosyaları (TC_XX_*.spec.ts)
+├── data/        # Test verileri
+├── config/      # Playwright config
+├── fixtures/    # Typed fixtures (POM enjeksiyonu)
+├── utils/       # Logger
+└── reporters/   # Özel konsol özeti
 ```
 
-## 🏗️ POM Yapısı
+## POM Bileşenleri
 
-### Pages
+- BasePage: `goto`, `waitForPageLoad`, `expectVisible`, `click`, `type`
+- Sayfalar: `HomePage`, `CheckboxPage`, `RadioButtonPage`, ... BasePage’den extend
+- Fixtures: `fixtures/test.ts` testlere `homePage`, `checkboxPage` vb. sağlar
 
-- **BasePage.ts**: Tüm sayfa sınıflarının temel sınıfı (eklendi)
-- Diğer sayfa sınıfları BasePage'den extend eder
-
-### Tests
-
-- Her test dosyası POM yapısına uygun yazılır
-- Test dosyaları `*.spec.ts` uzantısına sahiptir
-
-### Data
-
-- **testData.ts**: Merkezi test verileri
-- Interface'ler ve sabitler
-
-### Config
-
-- **playwright.config.ts**: Playwright konfigürasyonu
-
-### Utils
-
-- **Logger.ts**: Renkli ve zaman damgalı adım logları (`Logger.info/warn/error`)
-
-### Fixtures
-
-- **fixtures/test.ts**: POM sınıflarını otomatik sağlayan typed fixture
-
-## 🚀 Kullanım
-
-### Test Çalıştırma
-
-Root dizinden aşağıdaki komutları kullanın:
+## Çalıştırma
 
 ```bash
-# Tüm frontend testleri (headless)
+# Tüm frontend testleri
 npm run test:frontend
 
-# Headed (tarayıcı penceresi açık)
+# Headed
 npm run test:frontend -- --headed
 
-# Debug mod (Inspector)
-npm run test:debug-frontend
-
-# UI modu (spec seçerek çalıştırma)
+# UI Mode
 npx playwright test --ui --config=frontend-tests/config/playwright.config.ts
 
-# Belirli bir dosya
-npx playwright test frontend-tests/tests/TC_01_checkbox.spec.ts \
-  --config=frontend-tests/config/playwright.config.ts
+# Belirli dosya
+npx playwright test frontend-tests/tests/TC_01_checkbox.spec.ts --config=frontend-tests/config/playwright.config.ts
 
-# Test adında filtreleme (grep)
-npx playwright test --config=frontend-tests/config/playwright.config.ts \
-  --grep "Dropdown akışı"
+# Grep
+npx playwright test --config=frontend-tests/config/playwright.config.ts --grep "Dropdown"
 
-# HTML raporu açma
+# Rapor
 npx playwright show-report
 ```
 
-### Yeni Test Ekleme
+## Logger & Reporter
 
-1. `pages/` klasörüne yeni Page Object sınıfı ekle
-2. `tests/` klasörüne yeni test dosyası ekle
-3. `data/` klasörüne gerekli test verilerini ekle
+- `utils/Logger.ts`: `Logger.info/warn/error` ile adım adım renkli loglar
+- `reporters/summary-reporter.js`: toplam/passed/failed/skipped, oranlar ve toplam süre özeti
 
-## 📋 Test Kategorileri
+## İpuçları
 
-- **Navigation Tests**: Sayfa navigasyon testleri
-- **UI Tests**: Kullanıcı arayüzü testleri
-- **Functional Tests**: Fonksiyonel testler
-- **Performance Tests**: Performans testleri
-
-## 🔧 Konfigürasyon
-
-- **Base URL**: https://testing.qaautomationlabs.com
-- **Browsers**: Chrome, Firefox, Safari
-- **Timeout**: 10 saniye (varsayılan)
-- **Retries**: CI'da 2, local'de 0
-
-## 📊 Raporlama
-
-- **HTML Report**: Otomatik oluşturulur
-- **Screenshots**: Sadece hata durumunda
-- **Videos**: Sadece hata durumunda
-- **Traces**: İlk retry'da
-- **Konsol Özeti**: `reporters/summary-reporter.js` ile toplam/passed/failed/skipped, pass/fail oranları ve toplam süre yazdırılır
-- **Adım Logları**: POM metotlarında `Logger.info(...)` ile renkli adım logları
+- `HomePage.goto()` baseURL’e göre çalışır; config’te `baseURL` tanımlıdır
+- Locator tercihleri: `getByRole`, `data-testid`, ardından CSS/XPath
