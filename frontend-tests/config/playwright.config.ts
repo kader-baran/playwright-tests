@@ -8,7 +8,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: [
+    ["list"],
+    ["html"],
+    [path.resolve(__dirname, "../reporters/summary-reporter.js")],
+  ],
   use: {
     baseURL: "https://testing.qaautomationlabs.com",
     trace: "on-first-retry",
