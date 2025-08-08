@@ -22,7 +22,7 @@ export class HomePage extends BasePage {
     this.toolsDemoTitle = page.locator("text=Tools Demo");
     this.checkboxMenuLink = page.locator('a.nav-link:has-text("CheckBox")');
     this.radioButtonMenuLink = page.locator(
-      '//a[contains(@href, "radio-button.php")]'
+      'a.nav-link:has-text("Radio Button")'
     );
     this.dropdownMenuLink = page.locator('a.nav-link:has-text("Dropdown")');
     this.formMenuLink = page.locator('a.nav-link:has-text("Form")');
