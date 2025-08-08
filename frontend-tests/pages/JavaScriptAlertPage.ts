@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class JavaScriptAlertPage extends BasePage {
   readonly page: Page;
@@ -26,12 +27,14 @@ export class JavaScriptAlertPage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify JavaScript Alert page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async setupDialogHandler() {
+    Logger.info("Setup dialog handler");
     this.page.on("dialog", (dialog) => {
-      console.log(`Alert mesajı: ${dialog.message()}`);
+      Logger.info(`Alert mesajı: ${dialog.message()}`);
       if (dialog.type() === "prompt") {
         dialog.accept("kader"); // Prompt için 'kader' text'ini gir
       } else {
@@ -41,18 +44,21 @@ export class JavaScriptAlertPage extends BasePage {
   }
 
   async clickShowAlert() {
+    Logger.info("Click 'Show Alert'");
     await expect(this.showAlertButton).toBeVisible();
     await this.showAlertButton.click();
     await expect(this.alertShownText).toBeVisible();
   }
 
   async clickShowConfirm() {
+    Logger.info("Click 'Show Confirm'");
     await expect(this.showConfirmButton).toBeVisible();
     await this.showConfirmButton.click();
     await expect(this.confirmClickedText).toBeVisible();
   }
 
   async clickShowPrompt() {
+    Logger.info("Click 'Show Prompt'");
     await expect(this.showPromptButton).toBeVisible();
     await this.showPromptButton.click();
     await expect(this.promptEnteredText).toBeVisible();

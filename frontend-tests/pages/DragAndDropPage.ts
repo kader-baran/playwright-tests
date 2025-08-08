@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class DragAndDropPage extends BasePage {
   readonly page: Page;
@@ -14,10 +15,12 @@ export class DragAndDropPage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Drag & Drop page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async dragItemToPosition(fromIndex: number, toIndex: number) {
+    Logger.info(`Drag item from index ${fromIndex} to ${toIndex}`);
     await expect(this.sortableList).toBeVisible();
 
     const fromItem = this.sortableList.locator("li").nth(fromIndex);
@@ -29,6 +32,7 @@ export class DragAndDropPage extends BasePage {
     await fromItem.dragTo(toItem);
 
     // Verify items are still visible after drag
+    Logger.info("Verify items visible after drag");
     await expect(fromItem).toBeVisible();
     await expect(toItem).toBeVisible();
   }

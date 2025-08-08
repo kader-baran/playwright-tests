@@ -1,5 +1,6 @@
 import { Page, Locator, expect, FrameLocator } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class IframePage extends BasePage {
   readonly page: Page;
@@ -16,10 +17,12 @@ export class IframePage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Iframe page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async clickIframe1Button() {
+    Logger.info("Click iframe1 'Click Me' button and verify message");
     const clickMeButton = this.iframe1.locator('button:has-text("Click Me")');
     await expect(clickMeButton).toBeVisible();
     await clickMeButton.click();
@@ -29,6 +32,7 @@ export class IframePage extends BasePage {
   }
 
   async clickIframe2Button() {
+    Logger.info("Click iframe2 'Click Me' button and verify message");
     const clickMeButton = this.iframe2.locator('button:has-text("Click Me")');
     await expect(clickMeButton).toBeVisible();
     await clickMeButton.click();

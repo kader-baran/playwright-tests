@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class CheckboxPage extends BasePage {
   readonly page: Page;
@@ -30,21 +31,25 @@ export class CheckboxPage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Checkbox page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async clickCheckMeCheckbox() {
+    Logger.info("Click 'Check me' checkbox and verify");
     await expect(this.checkMeCheckbox).toBeVisible();
     await this.checkMeCheckbox.check();
     await expect(this.checkedText).toBeVisible();
   }
 
   async verifyEnableCheckboxes() {
+    Logger.info("Verify enable checkboxes are enabled");
     await expect(this.enableCheckbox1).toBeEnabled();
     await expect(this.enableCheckbox2).toBeEnabled();
   }
 
   async checkAllCheckboxes() {
+    Logger.info("Check all checkboxes");
     const checkboxCount = await this.allCheckboxes.count();
     for (let i = 0; i < checkboxCount; i++) {
       const checkbox = this.allCheckboxes.nth(i);
@@ -55,6 +60,7 @@ export class CheckboxPage extends BasePage {
   }
 
   async toggleAllCheckboxes() {
+    Logger.info("Toggle all checkboxes twice and verify");
     await expect(this.checkAllButton).toBeVisible();
     await this.checkAllButton.click();
     await this.checkAllButton.click();

@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class FormPage extends BasePage {
   readonly page: Page;
@@ -34,6 +35,7 @@ export class FormPage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Form page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
@@ -48,6 +50,7 @@ export class FormPage extends BasePage {
     state: string;
     pinCode: string;
   }) {
+    Logger.info("Fill form with provided data");
     await expect(this.firstNameInput).toBeVisible();
     await this.firstNameInput.fill(formData.firstName);
 
@@ -77,11 +80,13 @@ export class FormPage extends BasePage {
   }
 
   async submitForm() {
+    Logger.info("Submit form");
     await expect(this.submitButton).toBeVisible();
     await this.submitButton.click();
   }
 
   async verifyFormSubmitted() {
+    Logger.info("Verify form submitted successfully");
     await expect(this.successMessage).toBeVisible();
   }
 }

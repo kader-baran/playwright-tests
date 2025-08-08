@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class ShadowDomPage extends BasePage {
   readonly page: Page;
@@ -14,10 +15,12 @@ export class ShadowDomPage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Shadow DOM page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async verifyOutsideShadowDomText() {
+    Logger.info("Verify outside shadow DOM text is visible");
     await expect(this.outsideShadowDomText).toBeVisible();
   }
 }

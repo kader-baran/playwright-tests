@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { Logger } from "../utils/Logger";
 
 export class WebTablePage extends BasePage {
   readonly page: Page;
@@ -14,10 +15,14 @@ export class WebTablePage extends BasePage {
   }
 
   async verifyPageLoaded() {
+    Logger.info("Verify Web Table page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
   async searchAndVerify(searchTerm: string, expectedResult: string) {
+    Logger.info(
+      `Search in table: term='${searchTerm}', expect='${expectedResult}'`
+    );
     await expect(this.searchInput).toBeVisible();
     await this.searchInput.fill(searchTerm);
     await this.page.keyboard.press("Enter");
