@@ -1,0 +1,21 @@
+import { Page, Locator, expect } from '@playwright/test';
+
+export class ShadowDomPage {
+  readonly page: Page;
+  readonly pageTitle: Locator;
+  readonly outsideShadowDomText: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.pageTitle = page.locator('h1:has-text("Shadow DOM Demo")');
+    this.outsideShadowDomText = page.locator('text=This is outside Shadow DOM');
+  }
+
+  async verifyPageLoaded() {
+    await expect(this.pageTitle).toBeVisible();
+  }
+
+  async verifyOutsideShadowDomText() {
+    await expect(this.outsideShadowDomText).toBeVisible();
+  }
+} 

@@ -27,4 +27,27 @@ export const timeouts = {
   short: 5000,
   medium: 10000,
   long: 30000
-}; 
+};
+
+export const formTestData = {
+  firstName: 'kader',
+  middleName: 'kader',
+  lastName: 'baran',
+  email: 'kader@getmobil.com',
+  password: '123456',
+  address: 'istanbul',
+  city: 'kocaeli',
+  state: 'izmit',
+  pinCode: '1'
+};
+
+export const searchTestData = [
+  { searchTerm: '1', expectedResult: 'John Doe' },
+  { searchTerm: 'rahul', expectedResult: 'Rahul' },
+  { searchTerm: 'spain', expectedResult: 'Maria' }
+];
+
+export const dragAndDropTestData = [
+  { fromIndex: 0, toIndex: 1 }, // Item 1 to Item 2
+  { fromIndex: 2, toIndex: 4 }  // Item 3 to Item 5
+]; 
