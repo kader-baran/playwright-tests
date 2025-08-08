@@ -1,5 +1,5 @@
 // Test verileri için temel interface'ler
-export interface TestData {
+export interface TestData { //belirli bir test için gerekli olan verilerin tipini tanımlar:
   url: string;
   expectedTitle: string;
   timeout: number;
@@ -13,7 +13,7 @@ export const baseTestData: TestData = {
 };
 
 // Selector'lar için temel yapı
-export const selectors = {
+export const selectors = { // Testlerde selector'ı değiştirmek gerekirse sadece burası güncellenir.
   // Genel selector'lar
   pageHeader: 'h1, h2, h3',
   button: 'button',
@@ -29,7 +29,7 @@ export const timeouts = {
   long: 30000
 };
 
-export const formTestData = {
+export const formTestData = { //Form doldurma testlerinde kullanılacak sahte (dummy) veriler
   firstName: 'kader',
   middleName: 'kader',
   lastName: 'baran',
@@ -41,13 +41,13 @@ export const formTestData = {
   pinCode: '1'
 };
 
-export const searchTestData = [
+export const searchTestData = [ //Arama fonksiyonları için senaryolar listesi
   { searchTerm: '1', expectedResult: 'John Doe' },
   { searchTerm: 'rahul', expectedResult: 'Rahul' },
   { searchTerm: 'spain', expectedResult: 'Maria' }
 ];
 
-export const dragAndDropTestData = [
+export const dragAndDropTestData = [ //Drag and drop işlemleri için kaynak ve hedef index'leri belirten test verileri:
   { fromIndex: 0, toIndex: 1 }, // Item 1 to Item 2
   { fromIndex: 2, toIndex: 4 }  // Item 3 to Item 5
 ]; 

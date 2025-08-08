@@ -3,6 +3,8 @@ import { BasePage } from "./BasePage";
 import { Logger } from "../utils/Logger";
 
 export class CheckboxPage extends BasePage {
+  //Bu satırlar, sayfadaki HTML elementlerinin temsilcileridir
+  //readonly: Bu alanlar sonradan değiştirilemez.
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly checkMeCheckbox: Locator;
@@ -12,7 +14,7 @@ export class CheckboxPage extends BasePage {
   readonly allCheckboxes: Locator;
   readonly checkAllButton: Locator;
 
-  constructor(page: Page) {
+  constructor(page: Page) { //super(page): BasePage’e sayfa nesnesini gönderir.Diğer locator'lar burada this.page.locator(...) ile tanımlanır.
     super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Checkbox Demo")');
@@ -30,25 +32,25 @@ export class CheckboxPage extends BasePage {
     this.checkAllButton = page.locator("#toggleBtn");
   }
 
-  async verifyPageLoaded() {
+  async verifyPageLoaded() { // Sayfa Yüklendi Mi Kontrolü Sayfa Yüklendi Mi Kontrolü
     Logger.info("Verify Checkbox page loaded");
     await expect(this.pageTitle).toBeVisible();
   }
 
-  async clickCheckMeCheckbox() {
+  async clickCheckMeCheckbox() { // "Check me" Checkbox'ını Tıkla ve Doğrula
     Logger.info("Click 'Check me' checkbox and verify");
     await expect(this.checkMeCheckbox).toBeVisible();
     await this.checkMeCheckbox.check();
     await expect(this.checkedText).toBeVisible();
   }
 
-  async verifyEnableCheckboxes() {
+  async verifyEnableCheckboxes() { // Belirli Checkbox'lar Aktif Mi?
     Logger.info("Verify enable checkboxes are enabled");
     await expect(this.enableCheckbox1).toBeEnabled();
     await expect(this.enableCheckbox2).toBeEnabled();
   }
 
-  async checkAllCheckboxes() {
+  async checkAllCheckboxes() { //Tüm Checkbox'ları İşaretleme
     Logger.info("Check all checkboxes");
     const checkboxCount = await this.allCheckboxes.count();
     for (let i = 0; i < checkboxCount; i++) {
@@ -59,7 +61,7 @@ export class CheckboxPage extends BasePage {
     }
   }
 
-  async toggleAllCheckboxes() {
+  async toggleAllCheckboxes() { //"Check All" Butonunu 2 Kere Tıklayıp Hepsini Kaldırma
     Logger.info("Toggle all checkboxes twice and verify");
     await expect(this.checkAllButton).toBeVisible();
     await this.checkAllButton.click();

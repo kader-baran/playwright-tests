@@ -1,4 +1,9 @@
+//base: Playwright'ın test fonksiyonu (özelleştirilebilir).
+//Page: Playwright'ın page objesi tipi (her tarayıcı sekmesini temsil eder).
 import base, { Page } from "@playwright/test";
+
+//Bu satırlarda, testlerde kullanacağın tüm POM (Page Object Model) sınıfları içe aktarılmış.
+//Her biri farklı bir sayfanın etkileşimlerini içeriyor
 import { HomePage } from "../pages/HomePage";
 import { CheckboxPage } from "../pages/CheckboxPage";
 import { RadioButtonPage } from "../pages/RadioButtonPage";
@@ -61,5 +66,6 @@ const test = base.extend<Pages>({
   },
 });
 
+//export { expect }: expect() assertion fonksiyonu da dışa aktarılmış. Böylece test dosyalarında tekrar import etmene gerek kalmaz.
 export default test;
 export { expect } from "@playwright/test";
