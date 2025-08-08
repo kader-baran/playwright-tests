@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class FormPage {
+export class FormPage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly firstNameInput: Locator;
@@ -16,19 +17,20 @@ export class FormPage {
   readonly successMessage: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Input Form Validations")');
-    this.firstNameInput = page.locator('#firstname');
-    this.middleNameInput = page.locator('#middlename');
-    this.lastNameInput = page.locator('#lastname');
-    this.emailInput = page.locator('#email');
-    this.passwordInput = page.locator('#password');
-    this.addressInput = page.locator('#address');
-    this.cityInput = page.locator('#city');
-    this.stateInput = page.locator('#states');
-    this.pinCodeInput = page.locator('#pincode');
+    this.firstNameInput = page.locator("#firstname");
+    this.middleNameInput = page.locator("#middlename");
+    this.lastNameInput = page.locator("#lastname");
+    this.emailInput = page.locator("#email");
+    this.passwordInput = page.locator("#password");
+    this.addressInput = page.locator("#address");
+    this.cityInput = page.locator("#city");
+    this.stateInput = page.locator("#states");
+    this.pinCodeInput = page.locator("#pincode");
     this.submitButton = page.locator('button[type="submit"]');
-    this.successMessage = page.locator('text=Form submitted successfully');
+    this.successMessage = page.locator("text=Form submitted successfully");
   }
 
   async verifyPageLoaded() {
@@ -82,4 +84,4 @@ export class FormPage {
   async verifyFormSubmitted() {
     await expect(this.successMessage).toBeVisible();
   }
-} 
+}

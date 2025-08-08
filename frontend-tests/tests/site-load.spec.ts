@@ -1,31 +1,23 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from '../pages/HomePage';
-import { CheckboxPage } from '../pages/CheckboxPage';
-import { RadioButtonPage } from '../pages/RadioButtonPage';
-import { DropdownPage } from '../pages/DropdownPage';
-import { FormPage } from '../pages/FormPage';
-import { WebTablePage } from '../pages/WebTablePage';
-import { IframePage } from '../pages/IframePage';
-import { ShadowDomPage } from '../pages/ShadowDomPage';
-import { DragAndDropPage } from '../pages/DragAndDropPage';
-import { NotificationsPage } from '../pages/NotificationsPage';
-import { JavaScriptAlertPage } from '../pages/JavaScriptAlertPage';
-import { formTestData, searchTestData, dragAndDropTestData } from '../data/testData';
+import test from "../fixtures/test";
+import {
+  formTestData,
+  searchTestData,
+  dragAndDropTestData,
+} from "../data/testData";
 
-test('QA Automation Labs akış testi (POM yapısı)', async ({ page }) => {
-  // Initialize Page Objects
-  const homePage = new HomePage(page);
-  const checkboxPage = new CheckboxPage(page);
-  const radioButtonPage = new RadioButtonPage(page);
-  const dropdownPage = new DropdownPage(page);
-  const formPage = new FormPage(page);
-  const webTablePage = new WebTablePage(page);
-  const iframePage = new IframePage(page);
-  const shadowDomPage = new ShadowDomPage(page);
-  const dragAndDropPage = new DragAndDropPage(page);
-  const notificationsPage = new NotificationsPage(page);
-  const javaScriptAlertPage = new JavaScriptAlertPage(page);
-
+test("QA Automation Labs akış testi (POM yapısı)", async ({
+  homePage,
+  checkboxPage,
+  radioButtonPage,
+  dropdownPage,
+  formPage,
+  webTablePage,
+  iframePage,
+  shadowDomPage,
+  dragAndDropPage,
+  notificationsPage,
+  javaScriptAlertPage,
+}) => {
   // Navigate to home page and verify
   await homePage.goto();
   await homePage.verifyPageLoaded();
@@ -49,9 +41,9 @@ test('QA Automation Labs akış testi (POM yapısı)', async ({ page }) => {
   // Dropdown Section
   await homePage.navigateToDropdown();
   await dropdownPage.verifyPageLoaded();
-  await dropdownPage.selectFruit('Apple');
-  await dropdownPage.verifyFruitSelection('Apple');
-  await dropdownPage.selectCountry('India');
+  await dropdownPage.selectFruit("Apple");
+  await dropdownPage.verifyFruitSelection("Apple");
+  await dropdownPage.selectCountry("India");
   await dropdownPage.clickFirstSelected();
 
   // Form Section
@@ -64,9 +56,12 @@ test('QA Automation Labs akış testi (POM yapısı)', async ({ page }) => {
   // Web Table Section
   await homePage.navigateToWebTable();
   await webTablePage.verifyPageLoaded();
-  
+
   for (const searchData of searchTestData) {
-    await webTablePage.searchAndVerify(searchData.searchTerm, searchData.expectedResult);
+    await webTablePage.searchAndVerify(
+      searchData.searchTerm,
+      searchData.expectedResult
+    );
   }
 
   // Iframe Section
@@ -83,9 +78,12 @@ test('QA Automation Labs akış testi (POM yapısı)', async ({ page }) => {
   // Drag and Drop Section
   await homePage.navigateToDragAndDrop();
   await dragAndDropPage.verifyPageLoaded();
-  
+
   for (const dragData of dragAndDropTestData) {
-    await dragAndDropPage.dragItemToPosition(dragData.fromIndex, dragData.toIndex);
+    await dragAndDropPage.dragItemToPosition(
+      dragData.fromIndex,
+      dragData.toIndex
+    );
   }
 
   // Notifications Section
@@ -100,5 +98,4 @@ test('QA Automation Labs akış testi (POM yapısı)', async ({ page }) => {
   await javaScriptAlertPage.clickShowAlert();
   await javaScriptAlertPage.clickShowConfirm();
   await javaScriptAlertPage.clickShowPrompt();
-  
 });

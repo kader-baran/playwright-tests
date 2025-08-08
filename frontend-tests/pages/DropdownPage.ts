@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class DropdownPage {
+export class DropdownPage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly fruitDropdown: Locator;
@@ -9,12 +10,15 @@ export class DropdownPage {
   readonly fruitResult: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Dropdown Demo")');
-    this.fruitDropdown = page.locator('#fruitDropdown');
-    this.countryDropdown = page.locator('#countryDropdown');
-    this.firstSelectedButton = page.locator('button:has-text("First Selected")');
-    this.fruitResult = page.locator('#result');
+    this.fruitDropdown = page.locator("#fruitDropdown");
+    this.countryDropdown = page.locator("#countryDropdown");
+    this.firstSelectedButton = page.locator(
+      'button:has-text("First Selected")'
+    );
+    this.fruitResult = page.locator("#result");
   }
 
   async verifyPageLoaded() {
@@ -39,4 +43,4 @@ export class DropdownPage {
     await expect(this.firstSelectedButton).toBeVisible();
     await this.firstSelectedButton.click();
   }
-} 
+}

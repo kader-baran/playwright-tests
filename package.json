@@ -13,7 +13,6 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --headed --debug",
-
     "test:debug-store": "playwright test backend-tests/tests/storeApi.spec.ts --headed --debug",
     "test:debug-user": "playwright test backend-tests/tests/userApi.spec.ts --headed --debug",
     "test:debug-frontend": "playwright test --config=frontend-tests/config/playwright.config.ts --headed --debug",
@@ -29,7 +28,8 @@
   "license": "MIT",
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
-    "@playwright/test": "^1.54.1",
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.2.0",
     "dotenv": "^17.2.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

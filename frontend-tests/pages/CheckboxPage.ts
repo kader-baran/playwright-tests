@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class CheckboxPage {
+export class CheckboxPage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly checkMeCheckbox: Locator;
@@ -11,14 +12,21 @@ export class CheckboxPage {
   readonly checkAllButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Checkbox Demo")');
-    this.checkMeCheckbox = page.locator('label:has-text("Check me") input[type="checkbox"]');
-    this.checkedText = page.locator('text=Checked');
-    this.enableCheckbox1 = page.locator('label:has-text("Enable Checkbox 1") input[type="checkbox"]');
-    this.enableCheckbox2 = page.locator('label:has-text("Enable Checkbox 2") input[type="checkbox"]');
+    this.checkMeCheckbox = page.locator(
+      'label:has-text("Check me") input[type="checkbox"]'
+    );
+    this.checkedText = page.locator("text=Checked");
+    this.enableCheckbox1 = page.locator(
+      'label:has-text("Enable Checkbox 1") input[type="checkbox"]'
+    );
+    this.enableCheckbox2 = page.locator(
+      'label:has-text("Enable Checkbox 2") input[type="checkbox"]'
+    );
     this.allCheckboxes = page.locator('.myCheckbox[type="checkbox"]');
-    this.checkAllButton = page.locator('#toggleBtn');
+    this.checkAllButton = page.locator("#toggleBtn");
   }
 
   async verifyPageLoaded() {
@@ -50,11 +58,11 @@ export class CheckboxPage {
     await expect(this.checkAllButton).toBeVisible();
     await this.checkAllButton.click();
     await this.checkAllButton.click();
-    
+
     const checkboxCount = await this.allCheckboxes.count();
     for (let i = 0; i < checkboxCount; i++) {
       await expect(this.allCheckboxes.nth(i)).not.toBeChecked();
     }
     await expect(this.checkAllButton).toHaveText("Check All");
   }
-} 
+}

@@ -17,26 +17,36 @@ frontend-tests/
 ## 🏗️ POM Yapısı
 
 ### Pages
-- **BasePage.ts**: Tüm sayfa sınıflarının temel sınıfı
+
+- **BasePage.ts**: Tüm sayfa sınıflarının temel sınıfı (eklendi)
 - Diğer sayfa sınıfları BasePage'den extend eder
 
 ### Tests
+
 - Her test dosyası POM yapısına uygun yazılır
 - Test dosyaları `*.spec.ts` uzantısına sahiptir
 
 ### Data
+
 - **testData.ts**: Merkezi test verileri
 - Interface'ler ve sabitler
 
 ### Config
+
 - **playwright.config.ts**: Playwright konfigürasyonu
 
 ### Utils
+
 - **TestHelper.ts**: Ortak test yardımcı fonksiyonları
+
+### Fixtures
+
+- **fixtures/test.ts**: POM sınıflarını otomatik sağlayan typed fixture
 
 ## 🚀 Kullanım
 
 ### Test Çalıştırma
+
 ```bash
 # Tüm testleri çalıştır
 npx playwright test --headed
@@ -49,6 +59,7 @@ npx playwright test --debug
 ```
 
 ### Yeni Test Ekleme
+
 1. `pages/` klasörüne yeni Page Object sınıfı ekle
 2. `tests/` klasörüne yeni test dosyası ekle
 3. `data/` klasörüne gerekli test verilerini ekle
@@ -62,7 +73,7 @@ npx playwright test --debug
 
 ## 🔧 Konfigürasyon
 
-- **Base URL**: https://the-internet.herokuapp.com
+- **Base URL**: https://testing.qaautomationlabs.com
 - **Browsers**: Chrome, Firefox, Safari
 - **Timeout**: 10 saniye (varsayılan)
 - **Retries**: CI'da 2, local'de 0
@@ -72,4 +83,4 @@ npx playwright test --debug
 - **HTML Report**: Otomatik oluşturulur
 - **Screenshots**: Sadece hata durumunda
 - **Videos**: Sadece hata durumunda
-- **Traces**: İlk retry'da 
+- **Traces**: İlk retry'da

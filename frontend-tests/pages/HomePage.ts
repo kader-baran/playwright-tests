@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class HomePage {
+export class HomePage extends BasePage {
   readonly page: Page;
   readonly toolsDemoTitle: Locator;
   readonly checkboxMenuLink: Locator;
@@ -16,27 +17,38 @@ export class HomePage {
   readonly windowPopupModalMenuLink: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
-    this.toolsDemoTitle = page.locator('text=Tools Demo');
+    this.toolsDemoTitle = page.locator("text=Tools Demo");
     this.checkboxMenuLink = page.locator('a.nav-link:has-text("CheckBox")');
-    this.radioButtonMenuLink = page.locator('//a[contains(@href, "radio-button.php")]');
+    this.radioButtonMenuLink = page.locator(
+      '//a[contains(@href, "radio-button.php")]'
+    );
     this.dropdownMenuLink = page.locator('a.nav-link:has-text("Dropdown")');
     this.formMenuLink = page.locator('a.nav-link:has-text("Form")');
     this.webTableMenuLink = page.locator('a.nav-link:has-text("Web Table")');
     this.iframeMenuLink = page.locator('a.nav-link:has-text("Iframe")');
     this.shadowDomMenuLink = page.locator('a.nav-link:has-text("Shadow DOM")');
-    this.dragAndDropMenuLink = page.locator('a.nav-link:has-text("Drag & Drop")');
-    this.notificationsMenuLink = page.locator('a.nav-link:has-text("Notifications")');
-    this.javaScriptAlertMenuLink = page.locator('a.nav-link:has-text("JavaScript Alert")');
-    this.windowPopupModalMenuLink = page.locator('a.nav-link:has-text("Window Popup Modal")');
+    this.dragAndDropMenuLink = page.locator(
+      'a.nav-link:has-text("Drag & Drop")'
+    );
+    this.notificationsMenuLink = page.locator(
+      'a.nav-link:has-text("Notifications")'
+    );
+    this.javaScriptAlertMenuLink = page.locator(
+      'a.nav-link:has-text("JavaScript Alert")'
+    );
+    this.windowPopupModalMenuLink = page.locator(
+      'a.nav-link:has-text("Window Popup Modal")'
+    );
   }
 
   async goto() {
-    await this.page.goto('https://testing.qaautomationlabs.com/index.php');
+    await this.page.goto("/index.php");
   }
 
   async verifyPageLoaded() {
-    await expect(this.page).toHaveURL('https://testing.qaautomationlabs.com/index.php');
+    await expect(this.page).toHaveURL(/\/index\.php$/);
     await expect(this.page).toHaveTitle(/QA Automation Labs|Tools Demo/i);
     await expect(this.toolsDemoTitle).toBeVisible();
   }
@@ -95,4 +107,4 @@ export class HomePage {
     await expect(this.windowPopupModalMenuLink).toBeVisible();
     await this.windowPopupModalMenuLink.click();
   }
-} 
+}

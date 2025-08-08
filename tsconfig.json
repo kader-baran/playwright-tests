@@ -6,7 +6,8 @@
     "outDir": "./dist",
     "module": "commonjs",
     "moduleResolution": "node",
-    "types": ["@playwright/test"],
+    "types": ["node", "@playwright/test"],
+
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

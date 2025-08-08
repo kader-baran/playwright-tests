@@ -1,14 +1,16 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class WebTablePage {
+export class WebTablePage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly searchInput: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Table Demo")');
-    this.searchInput = page.locator('#searchInput');
+    this.searchInput = page.locator("#searchInput");
   }
 
   async verifyPageLoaded() {
@@ -18,7 +20,7 @@ export class WebTablePage {
   async searchAndVerify(searchTerm: string, expectedResult: string) {
     await expect(this.searchInput).toBeVisible();
     await this.searchInput.fill(searchTerm);
-    await this.page.keyboard.press('Enter');
+    await this.page.keyboard.press("Enter");
     await expect(this.page.locator(`text=${expectedResult}`)).toBeVisible();
   }
-} 
+}

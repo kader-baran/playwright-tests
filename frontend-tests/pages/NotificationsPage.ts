@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class NotificationsPage {
+export class NotificationsPage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly successButton: Locator;
@@ -9,6 +10,7 @@ export class NotificationsPage {
   readonly errorButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Notification Demo")');
     this.successButton = page.locator('button:has-text("Success Message")');
@@ -34,4 +36,4 @@ export class NotificationsPage {
     await expect(this.errorButton).toBeVisible();
     await this.errorButton.click();
   }
-} 
+}

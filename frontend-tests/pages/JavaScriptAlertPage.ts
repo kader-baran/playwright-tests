@@ -1,6 +1,7 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
-export class JavaScriptAlertPage {
+export class JavaScriptAlertPage extends BasePage {
   readonly page: Page;
   readonly pageTitle: Locator;
   readonly showAlertButton: Locator;
@@ -11,14 +12,17 @@ export class JavaScriptAlertPage {
   readonly promptEnteredText: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("JavaScript Alert Demo")');
     this.showAlertButton = page.locator('button:has-text("Show Alert")');
     this.showConfirmButton = page.locator('button:has-text("Show Confirm")');
     this.showPromptButton = page.locator('button:has-text("Show Prompt")');
-    this.alertShownText = page.locator('text=Alert shown.');
-    this.confirmClickedText = page.locator('text=You clicked OK on confirm button.');
-    this.promptEnteredText = page.locator('text=You entered: kader');
+    this.alertShownText = page.locator("text=Alert shown.");
+    this.confirmClickedText = page.locator(
+      "text=You clicked OK on confirm button."
+    );
+    this.promptEnteredText = page.locator("text=You entered: kader");
   }
 
   async verifyPageLoaded() {
@@ -26,10 +30,10 @@ export class JavaScriptAlertPage {
   }
 
   async setupDialogHandler() {
-    this.page.on('dialog', dialog => {
+    this.page.on("dialog", (dialog) => {
       console.log(`Alert mesajı: ${dialog.message()}`);
-      if (dialog.type() === 'prompt') {
-        dialog.accept('kader'); // Prompt için 'kader' text'ini gir
+      if (dialog.type() === "prompt") {
+        dialog.accept("kader"); // Prompt için 'kader' text'ini gir
       } else {
         dialog.accept(); // Diğer alert'ler için sadece OK
       }
@@ -53,4 +57,4 @@ export class JavaScriptAlertPage {
     await this.showPromptButton.click();
     await expect(this.promptEnteredText).toBeVisible();
   }
-} 
+}
