@@ -6,12 +6,13 @@ Bu klasör, Page Object Model (POM) yapısına uygun frontend testlerini içerir
 
 ```
 frontend-tests/
-├── pages/           # Page Object sınıfları
-├── tests/           # Test dosyaları
-├── data/            # Test verileri
-├── config/          # Konfigürasyon dosyaları
-├── utils/           # Yardımcı fonksiyonlar
-└── fixtures/        # Test fixture'ları
+├── pages/            # Page Object sınıfları (POM)
+├── tests/            # Spec dosyaları (örn: TC_01_checkbox.spec.ts)
+├── data/             # Test verileri
+├── config/           # Playwright konfigürasyonu
+├── fixtures/         # Typed test fixture'ları (POM enjekte eder)
+├── utils/            # Yardımcılar (örn: Logger)
+└── reporters/        # Özel raporlayıcılar (özet konsol çıktısı)
 ```
 
 ## 🏗️ POM Yapısı
@@ -37,7 +38,7 @@ frontend-tests/
 
 ### Utils
 
-- **TestHelper.ts**: Ortak test yardımcı fonksiyonları
+- **Logger.ts**: Renkli ve zaman damgalı adım logları (`Logger.info/warn/error`)
 
 ### Fixtures
 
@@ -47,15 +48,31 @@ frontend-tests/
 
 ### Test Çalıştırma
 
+Root dizinden aşağıdaki komutları kullanın:
+
 ```bash
-# Tüm testleri çalıştır
-npx playwright test --headed
+# Tüm frontend testleri (headless)
+npm run test:frontend
 
-# Belirli test dosyasını çalıştır
-npx playwright test tests/example.spec.ts --headed
+# Headed (tarayıcı penceresi açık)
+npm run test:frontend -- --headed
 
-# Debug modunda çalıştır
-npx playwright test --debug
+# Debug mod (Inspector)
+npm run test:debug-frontend
+
+# UI modu (spec seçerek çalıştırma)
+npx playwright test --ui --config=frontend-tests/config/playwright.config.ts
+
+# Belirli bir dosya
+npx playwright test frontend-tests/tests/TC_01_checkbox.spec.ts \
+  --config=frontend-tests/config/playwright.config.ts
+
+# Test adında filtreleme (grep)
+npx playwright test --config=frontend-tests/config/playwright.config.ts \
+  --grep "Dropdown akışı"
+
+# HTML raporu açma
+npx playwright show-report
 ```
 
 ### Yeni Test Ekleme
@@ -84,3 +101,5 @@ npx playwright test --debug
 - **Screenshots**: Sadece hata durumunda
 - **Videos**: Sadece hata durumunda
 - **Traces**: İlk retry'da
+- **Konsol Özeti**: `reporters/summary-reporter.js` ile toplam/passed/failed/skipped, pass/fail oranları ve toplam süre yazdırılır
+- **Adım Logları**: POM metotlarında `Logger.info(...)` ile renkli adım logları

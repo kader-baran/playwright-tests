@@ -1,6 +1,17 @@
 # Playwright Test Projesi
 
-Bu proje, stajyer için hazırlanmış frontend ve backend testlerini içeren Playwright test projesidir.
+Bu repo; Playwright ile yazılmış, frontend (UI) ve backend (API) testlerini barındıran örnek bir test otomasyon projesidir.
+
+## Projenin Genel Amacı
+
+- Frontend: POM (Page Object Model) ile sürdürülebilir ve okunabilir UI testleri
+- Backend: API uçlarının fonksiyonel doğrulaması ve veri akışlarının kontrolü
+- Kolay çalıştırılabilirlik: Hazır npm script’leri, renkli loglar ve konsol özeti
+
+Detaylı kullanım ve mimari açıklamalar için alt klasörlerdeki dokümanlara bakın:
+
+- Frontend: [frontend-tests/README.md](frontend-tests/README.md)
+- Backend: [backend-tests/README.md](backend-tests/README.md)
 
 ## Proje Yapısı
 
@@ -60,20 +71,13 @@ npm run report
 
 ## Test Yazma Rehberi
 
-### Frontend Testleri
+Detaylı test yazım rehberleri için ilgili klasörlerin README dosyalarını inceleyin:
 
-- `frontend-tests/` klasörü altında yazılır
-- UI elementleri test edilir
-- Kullanıcı etkileşimleri simüle edilir
-
-### Backend Testleri
-
-- `backend-tests/` klasörü altında yazılır
-- API endpoint'leri test edilir
-- HTTP istekleri ve yanıtları kontrol edilir
+- Frontend: [frontend-tests/README.md](frontend-tests/README.md)
+- Backend: [backend-tests/README.md](backend-tests/README.md)
 
 ## Notlar
 
 - Test dosyaları `.spec.ts` uzantısı ile bitmelidir
-- Her test dosyası bağımsız olarak çalışabilmelidir
-- Test verilerini temizlemeyi unutmayın
+- Her test dosyası bağımsız çalışmalıdır
+- Detaylı konfigürasyon ve gelişmiş kullanım için alt klasör README’lerine bakın
